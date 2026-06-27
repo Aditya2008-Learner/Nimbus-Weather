@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nimbus Weather</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body
+    class="{% if weather %}{{ weather.main }}{% if not weather.is_day %} night{% endif %}{% else %}default{% endif %}">
+
+    <!-- Background Effects -->
+
+    <div class="stars"></div>
+
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+
+    <!-- Main Container -->
+
+    <div class="container">
+
+        <h1>Nimbus Weather</h1>
+
+        <p class="subtitle">
+            Real-time Weather Around the World
+        </p>
+
+        <!-- Search Form -->
+
+        <form method="POST">
+
+            <input type="text" name="city" placeholder="Enter a city" required>
+
+            <button type="submit">
+                Search
+            </button>
+
+            <button type="button" id="locationBtn" class="location-btn">
+
+                📍 Use My Current Location
+
+            </button>
+
+        </form>
+
+        <!-- Weather -->
+
+        {% if weather %}
+
+        {% if weather.error %}
+
+        <p class="error">
+            {{ weather.error }}
+        </p>
+
+        {% else %}
+
+        <div class="weather-card">
+
+            <img class="weather-icon" src="https://openweathermap.org/img/wn/{{ weather.icon }}@4x.png"
+                alt="Weather Icon">
+
+            <h2>
+                📍 {{ weather.city }}, {{ weather.country }}
+            </h2>
+
+            <h1 class="temperature">
+
+                {{ weather.temperature }}°C
+
+            </h1>
+
+            <p class="description">
+
+                {{ weather.description }}
+
+            </p>
+
+            <p class="feels-like">
+
+                🥵 Feels Like {{ weather.feels_like }}°C
+
+            </p>
+
+        </div>
+
+        <!-- Divider -->
+
+        <div class="footer-divider"></div>
+
+        <!-- Stats -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <span>💧</span>
+
+                <h3>Humidity</h3>
+
+                <p>{{ weather.humidity }}%</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <span>💨</span>
+
+                <h3>Wind</h3>
+
+                <p>{{ weather.wind }} m/s</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <span>👁</span>
+
+                <h3>Visibility</h3>
+
+                <p>{{ weather.visibility }} km</p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <span>🌡</span>
+
+                <h3>Pressure</h3>
+
+                <p>{{ weather.pressure }} hPa</p>
+
+            </div>
+
+        </div>
+
+        <!-- Sunrise Sunset -->
+
+        <div class="sun-times">
+
+            <div>
+
+                🌅
+
+                <strong>Sunrise</strong>
+
+                <p>{{ weather.sunrise }}</p>
+
+            </div>
+
+            <div>
+
+                🌇
+
+                <strong>Sunset</strong>
+
+                <p>{{ weather.sunset }}</p>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+        {% endif %}
+
+        <!-- Footer -->
+
+        <footer>
+
+            <div class="footer-divider"></div>
+
+            <p>Powered by OpenWeather API</p>
+
+            <p>© 2026 Aditya Sen</p>
+
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='weather/clouds.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='weather/rain.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='weather/snow.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='weather/lightning.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='weather/sun.js') }}"></script>
+
+</body>
+
+</html>

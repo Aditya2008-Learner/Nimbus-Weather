@@ -1,0 +1,959 @@
+:root {
+
+    --primary: #0066ff;
+
+    --glass: rgba(255, 255, 255, .18);
+
+    --glass-border: rgba(255, 255, 255, .30);
+
+    --text: white;
+
+    --shadow: 0 25px 60px rgba(0, 0, 0, .18);
+
+    --radius: 25px;
+
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.8s ease;
+    min-height: 100vh;
+}
+
+.container {
+
+    width: min(92%, 550px);
+
+    max-width: 650px;
+
+    margin: 40px auto;
+
+    padding: 35px;
+
+    border-radius: 28px;
+
+    background: rgba(255, 255, 255, .18);
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    border: 1px solid rgba(255, 255, 255, .3);
+
+    box-shadow: 0 25px 60px rgba(0, 0, 0, .18);
+
+    position: relative;
+
+    z-index: 10;
+}
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(30px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+h1 {
+
+    font-size: 42px;
+
+    margin-bottom: 8px;
+
+}
+
+.subtitle {
+    color: white;
+    opacity: .9;
+    margin-bottom: 25px;
+    font-size: 18px;
+}
+
+p {
+
+    font-size: 17px;
+
+}
+
+input {
+
+    width: 100%;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 16px;
+
+    font-size: 17px;
+
+    outline: none;
+
+    transition: .3s;
+
+    box-sizing: border-box;
+
+}
+
+button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 16px;
+
+    background: #0066ff;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+button:hover {
+
+    background: #0051cc;
+
+    transform: translateY(-3px);
+
+    box-shadow: 0 12px 20px rgba(0, 0, 0, .18);
+
+}
+
+.weather-card {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    color: #0B3D91;
+    /* Dark blue text */
+}
+
+.weather-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, .18);
+}
+
+.weather-card h1 {
+    font-size: 72px;
+    margin: 10px 0;
+    font-weight: 700;
+    color: #003566;
+}
+
+.weather-card h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+    color: #003566;
+}
+
+.weather-card h3 {
+    color: #1976D2;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+}
+
+.divider {
+    width: 100%;
+    height: 2px;
+    background: #d0d0d0;
+    margin: 20px 0;
+    border-radius: 10px;
+}
+
+.weather-card p {
+    margin: 8px 0;
+    font-size: 18px;
+    color: #234E70;
+}
+
+.weather-icon {
+
+    width: 120px;
+
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .25));
+
+    animation: float 3s ease-in-out infinite;
+
+}
+
+footer {
+    margin-top: 25px;
+    text-align: center;
+    color: white;
+    opacity: .8;
+    font-size: 20px;
+}
+
+/* ---------- Footer ---------- */
+
+.footer-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, .3);
+    margin: 25px 0 15px;
+}
+
+footer {
+    text-align: center;
+    color: white;
+}
+
+footer p {
+    margin: 4px;
+    font-size: 14px;
+    opacity: .85;
+}
+
+/* ---------- Weather Details ---------- */
+
+.weather-details {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 25px;
+
+}
+
+.detail-box {
+
+    flex: 1;
+
+    background: #f7f9fc;
+
+    border-radius: 15px;
+
+    padding: 15px 10px;
+
+    text-align: center;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+
+    transition: .3s;
+
+}
+
+.detail-box:hover {
+
+    transform: translateY(-5px);
+
+}
+
+.detail-box h4 {
+
+    font-size: 30px;
+
+    margin: 5px;
+
+}
+
+.detail-box p {
+
+    font-size: 14px;
+
+    color: #666;
+
+    margin: 8px 0;
+
+}
+
+.detail-box span {
+
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    color: #003566;
+
+}
+
+/* ===============================
+   Dynamic Weather Backgrounds
+================================ */
+
+body.default {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+body.Clear {
+    background: linear-gradient(135deg, #FDB813, #FF7E5F);
+}
+
+body.Clouds {
+    background: linear-gradient(135deg, #6D83F2, #B8C6DB);
+}
+
+body.Rain {
+    background: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+}
+
+body.Drizzle {
+    background: linear-gradient(135deg, #4B79A1, #6DD5FA);
+}
+
+body.Thunderstorm {
+    background: linear-gradient(135deg, #2C3E50, #6A11CB);
+}
+
+body.Snow {
+    background: linear-gradient(135deg, #E6DADA, #274046);
+}
+
+body.Mist,
+body.Fog,
+body.Haze {
+    background: linear-gradient(135deg, #757F9A, #D7DDE8);
+}
+
+.location-btn {
+
+    width: 100%;
+
+    background: #16a34a;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 15px;
+
+    padding: 15px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+.location-btn:hover {
+
+    background: #15803d;
+
+    transform: translateY(-2px);
+
+}
+
+/* ===============================
+   Animations
+================================ */
+
+@keyframes fadeUp {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(25px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+.weather-card {
+
+    animation: fadeUp .7s ease;
+
+}
+
+input:focus {
+
+    transform: scale(1.02);
+
+    box-shadow: 0 0 15px rgba(255, 255, 255, .5);
+
+}
+
+@keyframes float {
+
+    0% {
+
+        transform: translateY(0);
+
+    }
+
+    50% {
+
+        transform: translateY(-8px);
+
+    }
+
+    100% {
+
+        transform: translateY(0);
+
+    }
+
+}
+
+.weather-icon {
+
+    width: 120px;
+
+    animation: float 3s ease-in-out infinite;
+
+}
+
+/* Night Mode */
+
+body.night {
+
+    position: relative;
+
+}
+
+body.Clear.night {
+
+    background: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+
+}
+
+body.Clouds.night {
+
+    background: linear-gradient(135deg, #232526, #414345);
+
+}
+
+body.Rain.night {
+
+    background: linear-gradient(135deg, #141E30, #243B55);
+
+}
+
+body.Thunderstorm.night {
+
+    background: linear-gradient(135deg, #000428, #004e92);
+
+}
+
+body.Snow.night {
+
+    background: linear-gradient(135deg, #485563, #29323c);
+
+}
+
+.stars {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition: .5s;
+
+    background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(white 1px, transparent 1px);
+
+    background-size: 120px 120px;
+
+    background-position: 0 0, 60px 60px;
+
+}
+
+body.night .stars {
+
+    opacity: .5;
+
+}
+
+.cloud {
+
+    position: fixed;
+
+    width: 220px;
+
+    height: 70px;
+
+    background: rgba(255, 255, 255, .18);
+
+    border-radius: 100px;
+
+    filter: blur(2px);
+
+    animation: moveClouds 40s linear infinite;
+
+    pointer-events: none;
+
+}
+
+.cloud::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 90px;
+
+    height: 90px;
+
+    background: inherit;
+
+    border-radius: 50%;
+
+    top: -40px;
+
+    left: 30px;
+
+}
+
+.cloud::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 70px;
+
+    height: 70px;
+
+    background: inherit;
+
+    border-radius: 50%;
+
+    top: -25px;
+
+    right: 30px;
+
+}
+
+.cloud1 {
+
+    top: 10%;
+
+    left: -250px;
+
+}
+
+.cloud2 {
+
+    top: 35%;
+
+    left: -350px;
+
+    animation-delay: -15s;
+
+}
+
+.cloud3 {
+
+    top: 60%;
+
+    left: -450px;
+
+    animation-delay: -28s;
+
+}
+
+@keyframes moveClouds {
+
+    from {
+
+        transform: translateX(0);
+
+    }
+
+    to {
+
+        transform: translateX(calc(100vw + 500px));
+
+    }
+
+}
+
+/* ==========================
+   Rain Animation
+========================== */
+
+.rain {
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition: .5s;
+
+    background-image:
+        repeating-linear-gradient(transparent 0px,
+            transparent 20px,
+            rgba(255, 255, 255, .35) 21px,
+            rgba(255, 255, 255, .35) 23px);
+
+    background-size: 8px 30px;
+
+}
+
+.show-rain {
+
+    opacity: 1;
+
+    animation: rainFall .45s linear infinite;
+
+}
+
+@keyframes rainFall {
+
+    from {
+
+        background-position: 0 0;
+
+    }
+
+    to {
+
+        background-position: -20px 80px;
+
+    }
+
+}
+
+/* Night backgrounds */
+
+body.Clear.night {
+    background: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
+}
+
+body.Clouds.night {
+    background: linear-gradient(135deg, #232526, #414345);
+}
+
+body.Rain.night,
+body.Drizzle.night {
+    background: linear-gradient(135deg, #141E30, #243B55);
+}
+
+body.Thunderstorm.night {
+    background: linear-gradient(135deg, #000428, #004e92);
+}
+
+body.Snow.night {
+    background: linear-gradient(135deg, #485563, #29323c);
+}
+
+.stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: 0.5s;
+    background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(white 1px, transparent 1px);
+    background-size: 120px 120px;
+    background-position: 0 0, 60px 60px;
+}
+
+body.night .stars {
+    opacity: 0.5;
+}
+
+/* ===========================
+   Floating Clouds
+=========================== */
+
+.cloud {
+    position: fixed;
+    width: 220px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 100px;
+    filter: blur(2px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+}
+
+.cloud::before {
+    content: "";
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: inherit;
+    border-radius: 50%;
+    top: -40px;
+    left: 30px;
+}
+
+.cloud::after {
+    content: "";
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    background: inherit;
+    border-radius: 50%;
+    top: -25px;
+    right: 30px;
+}
+
+.cloud1 {
+    top: 12%;
+    left: -250px;
+}
+
+.cloud2 {
+    top: 35%;
+    left: -350px;
+}
+
+.cloud3 {
+    top: 60%;
+    left: -450px;
+}
+
+body.Clouds .cloud {
+    opacity: 1;
+    animation: moveClouds 45s linear infinite;
+}
+
+@keyframes moveClouds {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(calc(100vw + 700px));
+    }
+}
+
+/* ==========================
+   Weather Card
+========================== */
+
+.weather-card {
+
+    text-align: center;
+
+    margin-top: 20px;
+
+}
+
+.weather-icon {
+
+    width: 140px;
+
+    margin-bottom: -10px;
+
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .25));
+
+    animation: float 4s ease-in-out infinite;
+
+}
+
+.temperature {
+
+    font-size: 72px;
+
+    font-weight: 700;
+
+    margin: 0;
+
+    line-height: 1;
+
+}
+
+.weather-card h2 {
+
+    margin: 10px 0 5px;
+
+    font-size: 30px;
+
+}
+
+.description {
+
+    font-size: 20px;
+
+    opacity: .9;
+
+    text-transform: capitalize;
+
+}
+
+.feels-like {
+
+    opacity: .8;
+
+    margin-top: 8px;
+
+}
+
+/* ==========================
+   Stats Grid
+========================== */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+
+    margin-top: 35px;
+
+}
+
+.stat-card {
+
+    background: rgba(255, 255, 255, .15);
+
+    backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(255, 255, 255, .25);
+
+    border-radius: 20px;
+
+    padding: 18px;
+
+    transition: .3s;
+
+}
+
+.stat-card:hover {
+
+    transform: translateY(-6px);
+
+    background: rgba(255, 255, 255, .22);
+
+}
+
+.stat-card span {
+
+    font-size: 28px;
+
+}
+
+.stat-card h3 {
+
+    margin: 12px 0 8px;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+.stat-card p {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+}
+
+/* ==========================
+   Sunrise & Sunset
+========================== */
+
+.sun-times {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 35px;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, .12);
+
+    border: 1px solid rgba(255, 255, 255, .2);
+
+}
+
+.sun-times div {
+
+    width: 48%;
+
+    text-align: center;
+
+    font-size: 18px;
+
+}
+
+.sun-times strong {
+
+    display: block;
+
+    margin: 8px 0;
+
+}
+
+/* ---------- Form ---------- */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+form input {
+    margin: 0;
+}
+
+form button {
+    margin: 0;
+}
