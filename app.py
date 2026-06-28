@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 import os
 import requests
 
@@ -11,6 +11,14 @@ app = Flask(__name__)
 
 API_KEY = os.getenv("API_KEY")
 
+
+def format_time(timestamp, timezone_offset):
+    city_timezone = timezone(timedelta(seconds=timezone_offset))
+
+    return datetime.fromtimestamp(
+        timestamp,
+        tz=city_timezone
+    ).strftime("%I:%M %p")
 
 def build_weather(data):
     return {
@@ -32,16 +40,17 @@ def build_weather(data):
 
         "description": data["weather"][0]["description"].title(),
         "icon": data["weather"][0]["icon"],
-        "main": data["weather"][0]["main"],
+        "main": data["weather"][0]["main"],  
 
-        "sunrise": datetime.fromtimestamp(
-            data["sys"]["sunrise"]
-        ).strftime("%I:%M %p"),
+"sunrise": format_time(
+    data["sys"]["sunrise"],
+    data["timezone"]
+),
 
-        "sunset": datetime.fromtimestamp(
-            data["sys"]["sunset"]
-        ).strftime("%I:%M %p"),
-
+"sunset": format_time(
+    data["sys"]["sunset"],
+    data["timezone"]
+),
         "is_day": (
             data["sys"]["sunrise"]
             <= data["dt"]
