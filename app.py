@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, session
 from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
 import os
@@ -9,16 +9,19 @@ load_dotenv()
 
 app = Flask(__name__)
 
+# Secret key for session
+app.secret_key = os.getenv("SECRET_KEY")
+
 API_KEY = os.getenv("API_KEY")
 
 
 def format_time(timestamp, timezone_offset):
     city_timezone = timezone(timedelta(seconds=timezone_offset))
-
     return datetime.fromtimestamp(
         timestamp,
         tz=city_timezone
     ).strftime("%I:%M %p")
+
 
 def build_weather(data):
     return {
@@ -40,17 +43,18 @@ def build_weather(data):
 
         "description": data["weather"][0]["description"].title(),
         "icon": data["weather"][0]["icon"],
-        "main": data["weather"][0]["main"],  
+        "main": data["weather"][0]["main"],
 
-"sunrise": format_time(
-    data["sys"]["sunrise"],
-    data["timezone"]
-),
+        "sunrise": format_time(
+            data["sys"]["sunrise"],
+            data["timezone"]
+        ),
 
-"sunset": format_time(
-    data["sys"]["sunset"],
-    data["timezone"]
-),
+        "sunset": format_time(
+            data["sys"]["sunset"],
+            data["timezone"]
+        ),
+
         "is_day": (
             data["sys"]["sunrise"]
             <= data["dt"]
@@ -58,32 +62,60 @@ def build_weather(data):
         )
     }
 
-
 @app.route("/", methods=["GET", "POST"])
 def home():
 
-    weather = None
+    # Weather from location redirect (shown once)
+    weather = session.pop("weather", None)
+
+    # Empty forecast list for now
+    daily_forecast = []
 
     if request.method == "POST":
 
         city = request.form["city"]
 
+        # Current weather API
         url = (
             f"https://api.openweathermap.org/data/2.5/weather"
             f"?q={city}&appid={API_KEY}&units=metric"
         )
 
+        # 5-day forecast API
+        forecast_url = (
+            f"https://api.openweathermap.org/data/2.5/forecast"
+            f"?q={city}&appid={API_KEY}&units=metric"
+        )
+
+        # Current weather
         response = requests.get(url)
         data = response.json()
 
+        # Forecast
+        forecast_response = requests.get(forecast_url)
+        forecast_data = forecast_response.json()
+
         if response.status_code == 200:
+
             weather = build_weather(data)
+
+            # Get one forecast (12 PM) for each day
+            for item in forecast_data["list"]:
+
+                if "12:00:00" in item["dt_txt"]:
+                    daily_forecast.append(item)
+
         else:
+
             weather = {
                 "error": "City not found."
             }
 
-    return render_template("index.html", weather=weather)
+    return render_template(
+        "index.html",
+        weather=weather,
+        forecast=daily_forecast
+    )
 
 
 @app.route("/location")
@@ -106,13 +138,13 @@ def location():
     print("Response:", data)
 
     if response.status_code == 200:
-        weather = build_weather(data)
+        session["weather"] = build_weather(data)
     else:
-        weather = {
+        session["weather"] = {
             "error": "Unable to fetch location weather."
         }
 
-    return render_template("index.html", weather=weather)
+    return redirect("/")
 
 
 if __name__ == "__main__":
