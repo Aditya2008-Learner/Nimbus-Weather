@@ -24,24 +24,32 @@
     <div class="cloud cloud2"></div>
     <div class="cloud cloud3"></div>
 
-    <!-- Main Container -->
-
     <div class="container">
 
-        <h1>Nimbus Weather</h1>
+        <!-- ================= HEADER ================= -->
 
-        <p class="subtitle">
-            Real-time Weather Around the World
-        </p>
+        <header>
 
-        <!-- Search Form -->
+            <h1>Nimbus Weather</h1>
+
+            <p class="subtitle">
+
+                Real-time Weather Around the World
+
+            </p>
+
+        </header>
+
+        <!-- ================= SEARCH ================= -->
 
         <form method="POST">
 
-            <input type="text" name="city" placeholder="Enter a city" required>
+            <input type="text" name="city" placeholder="Search any city..." autocomplete="off" required>
 
             <button type="submit">
-                Search
+
+                🔍 Search
+
             </button>
 
             <button type="button" id="locationBtn" class="location-btn">
@@ -52,54 +60,54 @@
 
         </form>
 
-        <!-- Weather -->
-
         {% if weather %}
 
         {% if weather.error %}
 
-        <p class="error">
+        <div class="error-card">
+
             {{ weather.error }}
-        </p>
+
+        </div>
 
         {% else %}
 
-        <div class="weather-card">
+        <!-- ================= HERO ================= -->
+
+        <section class="hero">
 
             <img class="weather-icon" src="https://openweathermap.org/img/wn/{{ weather.icon }}@4x.png"
                 alt="Weather Icon">
 
             <h2>
+
                 📍 {{ weather.city }}, {{ weather.country }}
+
             </h2>
 
-            <h1 class="temperature">
+            <div class="temperature">
 
                 {{ weather.temperature }}°C
 
-            </h1>
+            </div>
 
-            <p class="description">
+            <div class="description">
 
                 {{ weather.description }}
 
-            </p>
+            </div>
 
-            <p class="feels-like">
+            <div class="feels-like">
 
-                🥵 Feels Like {{ weather.feels_like }}°C
+                Feels Like {{ weather.feels_like }}°C
 
-            </p>
+            </div>
 
-        </div>
+        </section>
 
-        <!-- Divider -->
+        <!-- ================= STATS ================= -->
 
-        <div class="footer-divider"></div>
-
-        <!-- Stats -->
-
-        <div class="stats-grid">
+        <section class="stats-grid">
 
             <div class="stat-card">
 
@@ -123,16 +131,6 @@
 
             <div class="stat-card">
 
-                <span>👁</span>
-
-                <h3>Visibility</h3>
-
-                <p>{{ weather.visibility }} km</p>
-
-            </div>
-
-            <div class="stat-card">
-
                 <span>🌡</span>
 
                 <h3>Pressure</h3>
@@ -141,17 +139,45 @@
 
             </div>
 
-        </div>
+            <div class="stat-card">
 
-        <!-- Sunrise Sunset -->
+                <span>👁</span>
 
-        <div class="sun-times">
+                <h3>Visibility</h3>
+
+                <p>{{ weather.visibility }} km</p>
+
+            </div>
+
+        </section>
+
+        <!-- ================= AQI ================= -->
+
+        <section class="aqi-card">
+
+            <h2>
+
+                🌿 Air Quality
+
+            </h2>
+
+            <div class="aqi-badge" style="background-color: {{ weather.aqi_color | default('#808080') }}">
+
+                {{ weather.aqi_text }}
+
+            </div>
+
+        </section>
+
+        <!-- ================= SUN ================= -->
+
+        <section class="sun-card">
 
             <div>
 
-                🌅
+                <span>🌅</span>
 
-                <strong>Sunrise</strong>
+                <h3>Sunrise</h3>
 
                 <p>{{ weather.sunrise }}</p>
 
@@ -159,29 +185,85 @@
 
             <div>
 
-                🌇
+                <span>🌇</span>
 
-                <strong>Sunset</strong>
+                <h3>Sunset</h3>
 
                 <p>{{ weather.sunset }}</p>
 
             </div>
 
-        </div>
+        </section>
+
+        <!-- ================= FORECAST ================= -->
+
+        {% if forecast %}
+
+        <section class="forecast-section">
+
+            <h2>
+
+                📅 5-Day Forecast
+
+            </h2>
+
+            <div class="forecast-scroll">
+
+                {% for day in forecast %}
+
+                <div class="forecast-card">
+
+                    <h3>
+
+                        {{ day.day }}
+
+                    </h3>
+
+                    <img src="https://openweathermap.org/img/wn/{{ day.icon }}@2x.png" alt="{{ day.description }}">
+
+                    <div class="forecast-temp">
+
+                        {{ day.temp }}°C
+
+                    </div>
+
+                    <p>
+
+                        {{ day.description }}
+
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
 
         {% endif %}
 
         {% endif %}
 
-        <!-- Footer -->
+        {% endif %}
+
+        <!-- ================= FOOTER ================= -->
 
         <footer>
 
             <div class="footer-divider"></div>
 
-            <p>Powered by OpenWeather API</p>
+            <p>
 
-            <p>© 2026 Aditya Sen</p>
+                Powered by OpenWeather API
+
+            </p>
+
+            <p>
+
+                © 2026 Aditya Sen
+
+            </p>
 
         </footer>
 

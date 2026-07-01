@@ -957,3 +957,134 @@ form input {
 form button {
     margin: 0;
 }
+
+/* ---------- 5 Day Forecast ---------- */
+
+.forecast-section {
+
+    margin-top: 35px;
+
+    text-align: center;
+
+}
+
+.forecast-section h2 {
+
+    color: white;
+
+    margin-bottom: 20px;
+
+}
+
+.forecast-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+
+    gap: 15px;
+
+}
+
+.forecast-card {
+
+    background: rgba(255, 255, 255, .12);
+
+    backdrop-filter: blur(12px);
+
+    border-radius: 18px;
+
+    padding: 18px 12px;
+
+    color: white;
+
+    transition: .3s;
+
+}
+
+.forecast-card:hover {
+
+    transform: translateY(-5px);
+
+    background: rgba(255, 255, 255, .18);
+
+}
+
+.forecast-card img {
+
+    width: 70px;
+
+}
+
+.forecast-temp {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    margin: 8px 0;
+
+}
+
+.forecast-desc {
+
+    font-size: 14px;
+
+    opacity: .85;
+
+}
+
+/* ==========================
+   AIR QUALITY
+========================== */
+
+.aqi-card {
+
+    margin: 30px 0;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    backdrop-filter: blur(15px);
+
+    text-align: center;
+
+    color: white;
+
+}
+
+.aqi-card h2 {
+
+    margin-bottom: 18px;
+
+    font-size: 28px;
+
+}
+
+.aqi-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 12px 28px;
+
+    border-radius: 999px;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    width: auto;
+
+    min-width: 120px;
+
+    margin: auto;
+}
