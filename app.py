@@ -195,6 +195,92 @@ def home():
 
     )  
 
+
+@app.route("/weather/<city>")
+def weather(city):
+
+    url = (
+        f"https://api.openweathermap.org/data/2.5/weather"
+        f"?q={city}&appid={API_KEY}&units=metric"
+    )
+
+    forecast_url = (
+        f"https://api.openweathermap.org/data/2.5/forecast"
+        f"?q={city}&appid={API_KEY}&units=metric"
+    )
+
+    response = requests.get(url)
+    data = response.json()
+
+    forecast_response = requests.get(forecast_url)
+    forecast_data = forecast_response.json()
+
+    daily_forecast = []
+
+    if response.status_code == 200:
+
+        weather = build_weather(data)
+
+        # AQI
+        aqi_url = (
+            "https://api.openweathermap.org/data/2.5/air_pollution"
+            f"?lat={weather['lat']}"
+            f"&lon={weather['lon']}"
+            f"&appid={API_KEY}"
+        )
+
+        aqi_response = requests.get(aqi_url)
+        aqi_data = aqi_response.json()
+
+        weather["aqi"] = aqi_data["list"][0]["main"]["aqi"]
+
+        aqi_levels = {
+            1: ("Good", "#2ecc71"),
+            2: ("Fair", "#f1c40f"),
+            3: ("Moderate", "#e67e22"),
+            4: ("Poor", "#e74c3c"),
+            5: ("Very Poor", "#8e44ad")
+        }
+
+        weather["aqi_text"] = aqi_levels[weather["aqi"]][0]
+        weather["aqi_color"] = aqi_levels[weather["aqi"]][1]
+
+        for item in forecast_data["list"]:
+
+            if "12:00:00" in item["dt_txt"]:
+
+                daily_forecast.append({
+
+                    "day": datetime.strptime(
+                        item["dt_txt"],
+                        "%Y-%m-%d %H:%M:%S"
+                    ).strftime("%a"),
+
+                    "temp": round(item["main"]["temp"]),
+                    "temp_min": round(item["main"]["temp_min"]),
+                    "temp_max": round(item["main"]["temp_max"]),
+                    "description": item["weather"][0]["description"].title(),
+                    "icon": item["weather"][0]["icon"],
+                    "humidity": item["main"]["humidity"],
+                    "pop": int(item["pop"] * 100)
+
+                })
+
+                if len(daily_forecast) == 5:
+                    break
+
+    else:
+
+        weather = {
+            "error": "City not found."
+        }
+
+    return render_template(
+        "index.html",
+        weather=weather,
+        forecast=daily_forecast
+    )
+
 # -----------------------------
 # Current Location Route
 # -----------------------------

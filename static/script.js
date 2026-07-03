@@ -9,6 +9,24 @@ if (form) {
     });
 }
 
+const searchForm = document.getElementById("searchForm");
+
+if (searchForm) {
+
+    searchForm.addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        const city = searchForm.city.value.trim();
+
+        if (city) {
+            window.location.href = `/weather/${encodeURIComponent(city)}`;
+        }
+
+    });
+
+}
+
 const locationBtn = document.getElementById("locationBtn");
 
 if (locationBtn) {
