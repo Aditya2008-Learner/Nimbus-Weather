@@ -15,61 +15,32 @@ if (locationBtn) {
 
     locationBtn.addEventListener("click", () => {
 
+        console.log("Location button clicked!");
+
         if (!navigator.geolocation) {
-            alert("Geolocation is not supported by your browser.");
+            alert("Geolocation is not supported.");
             return;
         }
 
-        locationBtn.innerHTML = "📍 Detecting...";
-        locationBtn.disabled = true;
-
         navigator.geolocation.getCurrentPosition(
 
-            // Success
             (position) => {
+
+                console.log(position);
 
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
-
-                console.log("Latitude:", lat);
-                console.log("Longitude:", lon);
-                console.log("Accuracy:", position.coords.accuracy + " meters");
 
                 window.location.href = `/location?lat=${lat}&lon=${lon}`;
 
             },
 
-            // Error
             (error) => {
 
-                console.error(error);
+                console.log(error);
 
-                let message = "Unable to retrieve your location.";
+                alert(error.message);
 
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        message = "Location permission was denied.";
-                        break;
-
-                    case error.POSITION_UNAVAILABLE:
-                        message = "Location information is unavailable.";
-                        break;
-
-                    case error.TIMEOUT:
-                        message = "Location request timed out. Please try again.";
-                        break;
-                }
-
-                alert(message);
-
-                locationBtn.innerHTML = "📍 Use My Current Location";
-                locationBtn.disabled = false;
-            },
-
-            // Options
-            {
-                timeout: 10000,
-                maximumAge: 60000
             }
 
         );

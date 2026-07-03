@@ -201,11 +201,7 @@
 
         <section class="forecast-section">
 
-            <h2>
-
-                📅 5-Day Forecast
-
-            </h2>
+            <h2>📅 5-Day Forecast</h2>
 
             <div class="forecast-scroll">
 
@@ -213,25 +209,34 @@
 
                 <div class="forecast-card">
 
-                    <h3>
-
+                    <h3 class="forecast-day">
                         {{ day.day }}
-
                     </h3>
 
-                    <img src="https://openweathermap.org/img/wn/{{ day.icon }}@2x.png" alt="{{ day.description }}">
+                    <img class="forecast-icon" src="https://openweathermap.org/img/wn/{{ day.icon }}@2x.png"
+                        alt="{{ day.description }}">
 
-                    <div class="forecast-temp">
-
+                    <h2 class="forecast-temp">
                         {{ day.temp }}°C
+                    </h2>
+
+                    <p class="forecast-description">
+                        {{ day.description }}
+                    </p>
+
+                    <div class="forecast-extra">
+
+                        <span>⬇ {{ day.temp_min }}°</span>
+
+                        <span>⬆ {{ day.temp_max }}°</span>
 
                     </div>
 
-                    <p>
+                    <div class="forecast-rain">
 
-                        {{ day.description }}
+                        🌧 {{ day["pop"] }}%
 
-                    </p>
+                    </div>
 
                 </div>
 
@@ -240,12 +245,11 @@
             </div>
 
         </section>
+        {% endif %} {# forecast #}
 
-        {% endif %}
+        {% endif %} {# weather.error #}
 
-        {% endif %}
-
-        {% endif %}
+        {% endif %} {# weather #}
 
         <!-- ================= FOOTER ================= -->
 
@@ -273,15 +277,15 @@
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
-    <script src="{{ url_for('static', filename='weather/clouds.js') }}"></script>
+    <!--
+<script src="{{ url_for('static', filename='weather/clouds.js') }}"></script>
+<script src="{{ url_for('static', filename='weather/rain.js') }}"></script>
+<script src="{{ url_for('static', filename='weather/snow.js') }}"></script>
+<script src="{{ url_for('static', filename='weather/lightning.js') }}"></script>
+<script src="{{ url_for('static', filename='weather/sun.js') }}"></script>
+-->
 
-    <script src="{{ url_for('static', filename='weather/rain.js') }}"></script>
 
-    <script src="{{ url_for('static', filename='weather/snow.js') }}"></script>
-
-    <script src="{{ url_for('static', filename='weather/lightning.js') }}"></script>
-
-    <script src="{{ url_for('static', filename='weather/sun.js') }}"></script>
 
 </body>
 
