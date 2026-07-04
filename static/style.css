@@ -1324,6 +1324,18 @@ body.Clouds .cloud {
 
 }
 
+.stat-subtitle {
+
+    margin-top: 8px;
+
+    font-size: .9rem;
+
+    opacity: .75;
+
+    font-weight: 500;
+
+}
+
 /* ---------- Sun Card ---------- */
 
 .sun-card {

@@ -42,9 +42,9 @@ def build_weather(data):
         "pressure": data["main"]["pressure"],
 
         "visibility": data["visibility"] // 1000,
-
-        "wind": round(data["wind"]["speed"], 1),
 "clouds": data["clouds"]["all"],
+        "wind": round(data["wind"]["speed"], 1),
+
         "description": data["weather"][0]["description"].title(),
         "icon": data["weather"][0]["icon"],
         "main": data["weather"][0]["main"],
@@ -171,11 +171,15 @@ def home():
         data = response.json()
 
         if response.status_code == 200:
-
             weather = build_weather(data)
             weather = get_aqi(weather)
 
-            forecast = get_forecast(city)
+            forecast = get_forecast(weather["city"])
+
+            weather["rain_chance"] = max(
+                (day["pop"] for day in forecast),
+                default=0
+            )
 
         else:
 
@@ -309,24 +313,42 @@ def location():
     )
 
     response = requests.get(current_url)
-    data = response.json()
-
     if response.status_code == 200:
-
+        data = response.json()
         weather = build_weather(data)
         weather = get_aqi(weather)
 
-        forecast = get_forecast(weather["city"])
+        city = data.get("name", "")
+        forecast = get_forecast(city)
+
+        # Highest rain chance today
+        weather["rain_chance"] = 0
+
+        forecast_url = (
+            "https://api.openweathermap.org/data/2.5/forecast"
+            f"?q={city}"
+            f"&appid={API_KEY}"
+            "&units=metric"
+        )
+
+        forecast_response = requests.get(forecast_url)
+        forecast_data = forecast_response.json()
+
+        today = datetime.now().strftime("%Y-%m-%d")
+
+        for item in forecast_data["list"]:
+            if item["dt_txt"].startswith(today):
+                weather["rain_chance"] = max(
+                    weather["rain_chance"],
+                    int(item["pop"] * 100)
+                )
 
         session["weather"] = weather
         session["forecast"] = forecast
-
     else:
-
         session["weather"] = {
             "error": "Unable to fetch location weather."
         }
-
         session["forecast"] = []
 
     return redirect("/")

@@ -218,27 +218,40 @@
                     <i data-lucide="cloud-rain"></i>
                 </div>
 
-                <div class="stat-value">{{ weather.rain_chance }}%</div>
-
-                <div class="stat-title">Rain Chance</div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    <i data-lucide="cloud"></i>
-                </div>
-
                 <div class="stat-value">
-                    {{ weather.clouds }}%
+                    {{ weather.rain_chance }}%
                 </div>
 
                 <div class="stat-title">
-                    Cloud Cover
+                    Rain Chance
                 </div>
 
-            </div>
+                <div class="stat-subtitle">
+
+                    {% if weather.rain_chance == 0 %}
+
+                    No Rain Expected
+
+                    {% elif weather.rain_chance < 40 %} Slight Chance {% elif weather.rain_chance < 70 %} Carry an
+                        Umbrella ☔ {% else %} Heavy Rain Expected {% endif %} </div>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        <i data-lucide="cloud"></i>
+                    </div>
+
+                    <div class="stat-value">
+                        {{ weather.clouds }}%
+                    </div>
+
+                    <div class="stat-title">
+                        Cloud Cover
+                    </div>
+
+                </div>
         </section>
 
         <!-- ================= SUN ================= -->
