@@ -42,6 +42,7 @@ if (locationBtn) {
 
         navigator.geolocation.getCurrentPosition(
 
+            // Success
             (position) => {
 
                 console.log(position);
@@ -53,12 +54,40 @@ if (locationBtn) {
 
             },
 
+            // Error
             (error) => {
 
-                console.log(error);
+                console.error(error);
 
-                alert(error.message);
+                let message = "";
 
+                switch (error.code) {
+
+                    case error.PERMISSION_DENIED:
+                        message = "Location permission was denied. Please allow location access for your browser.";
+                        break;
+
+                    case error.POSITION_UNAVAILABLE:
+                        message = "Your device couldn't determine your location. Please turn on GPS and try again.";
+                        break;
+
+                    case error.TIMEOUT:
+                        message = "Location request timed out. Please try again.";
+                        break;
+
+                    default:
+                        message = "Location is unavailable on this device.";
+                }
+
+                alert(message);
+
+            },
+
+            // Options
+            {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
             }
 
         );
