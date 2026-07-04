@@ -42,7 +42,7 @@
 
         <!-- ================= SEARCH ================= -->
 
-        <form id="searchForm">
+        <form id="searchForm" method="POST">
 
             <input type="text" name="city" placeholder="Search any city..." autocomplete="off" required>
 
@@ -59,6 +59,8 @@
             </button>
 
         </form>
+
+        {% if not weather %}
 
         <section class="popular-cities">
 
@@ -91,7 +93,6 @@
                     <span class="city-name">Paris</span>
                 </a>
 
-
                 <a href="/weather/Singapore" class="city-chip">
                     <img class="flag" src="https://flagcdn.com/w40/sg.png" alt="">
                     <span class="city-name">Singapore</span>
@@ -110,6 +111,8 @@
             </div>
 
         </section>
+
+        {% endif %}
 
         {% if weather %}
 
@@ -162,85 +165,114 @@
 
             <div class="stat-card">
 
-                <span>💧</span>
+                <div class="stat-icon">
+                    <i data-lucide="droplets"></i>
+                </div>
 
-                <h3>Humidity</h3>
+                <div class="stat-value">{{ weather.humidity }}%</div>
 
-                <p>{{ weather.humidity }}%</p>
-
-            </div>
-
-            <div class="stat-card">
-
-                <span>💨</span>
-
-                <h3>Wind</h3>
-
-                <p>{{ weather.wind }} m/s</p>
+                <div class="stat-title">Humidity</div>
 
             </div>
 
             <div class="stat-card">
 
-                <span>🌡</span>
+                <div class="stat-icon">
+                    <i data-lucide="wind"></i>
+                </div>
 
-                <h3>Pressure</h3>
+                <div class="stat-value">{{ weather.wind }} m/s</div>
 
-                <p>{{ weather.pressure }} hPa</p>
+                <div class="stat-title">Wind Speed</div>
 
             </div>
 
             <div class="stat-card">
 
-                <span>👁</span>
+                <div class="stat-icon">
+                    <i data-lucide="gauge"></i>
+                </div>
 
-                <h3>Visibility</h3>
+                <div class="stat-value">{{ weather.pressure }}</div>
 
-                <p>{{ weather.visibility }} km</p>
-
-            </div>
-
-        </section>
-
-        <!-- ================= AQI ================= -->
-
-        <section class="aqi-card">
-
-            <h2>
-
-                🌿 Air Quality
-
-            </h2>
-
-            <div class="aqi-badge" style="background-color: {{ weather.aqi_color | default('#808080') }}">
-
-                {{ weather.aqi_text }}
+                <div class="stat-title">Pressure (hPa)</div>
 
             </div>
 
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i data-lucide="eye"></i>
+                </div>
+
+                <div class="stat-value">{{ weather.visibility }} km</div>
+
+                <div class="stat-title">Visibility</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i data-lucide="cloud-rain"></i>
+                </div>
+
+                <div class="stat-value">{{ weather.rain_chance }}%</div>
+
+                <div class="stat-title">Rain Chance</div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i data-lucide="cloud"></i>
+                </div>
+
+                <div class="stat-value">
+                    {{ weather.clouds }}%
+                </div>
+
+                <div class="stat-title">
+                    Cloud Cover
+                </div>
+
+            </div>
         </section>
 
         <!-- ================= SUN ================= -->
 
         <section class="sun-card">
 
-            <div>
+            <h2>🌅 Sun Cycle</h2>
 
-                <span>🌅</span>
+            <div class="sun-times">
 
-                <h3>Sunrise</h3>
+                <div class="sun-item">
 
-                <p>{{ weather.sunrise }}</p>
+                    <i data-lucide="sunrise"></i>
 
-            </div>
+                    <div class="sun-label">Sunrise</div>
 
-            <div>
+                    <div class="sun-time">
+                        {{ weather.sunrise }}
+                    </div>
 
-                <span>🌇</span>
+                </div>
 
-                <h3>Sunset</h3>
+                <div class="sun-divider"></div>
 
-                <p>{{ weather.sunset }}</p>
+                <div class="sun-item">
+
+                    <i data-lucide="sunset"></i>
+
+                    <div class="sun-label">Sunset</div>
+
+                    <div class="sun-time">
+                        {{ weather.sunset }}
+                    </div>
+
+                </div>
 
             </div>
 
@@ -336,7 +368,11 @@
 <script src="{{ url_for('static', filename='weather/sun.js') }}"></script>
 -->
 
+    <script src="https://unpkg.com/lucide@latest"></script>
 
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 

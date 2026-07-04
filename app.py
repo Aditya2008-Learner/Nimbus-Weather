@@ -44,7 +44,7 @@ def build_weather(data):
         "visibility": data["visibility"] // 1000,
 
         "wind": round(data["wind"]["speed"], 1),
-
+"clouds": data["clouds"]["all"],
         "description": data["weather"][0]["description"].title(),
         "icon": data["weather"][0]["icon"],
         "main": data["weather"][0]["main"],
@@ -221,6 +221,7 @@ def weather(city):
 
         weather = build_weather(data)
 
+        weather["rain_chance"] = 0
         # AQI
         aqi_url = (
             "https://api.openweathermap.org/data/2.5/air_pollution"
@@ -245,35 +246,44 @@ def weather(city):
         weather["aqi_text"] = aqi_levels[weather["aqi"]][0]
         weather["aqi_color"] = aqi_levels[weather["aqi"]][1]
 
-        for item in forecast_data["list"]:
+# Highest chance of rain today
+    today = datetime.now().strftime("%Y-%m-%d")
 
-            if "12:00:00" in item["dt_txt"]:
+    for item in forecast_data["list"]:
 
-                daily_forecast.append({
+        if item["dt_txt"].startswith(today):
 
-                    "day": datetime.strptime(
-                        item["dt_txt"],
-                        "%Y-%m-%d %H:%M:%S"
-                    ).strftime("%a"),
+            weather["rain_chance"] = max(
 
-                    "temp": round(item["main"]["temp"]),
-                    "temp_min": round(item["main"]["temp_min"]),
-                    "temp_max": round(item["main"]["temp_max"]),
-                    "description": item["weather"][0]["description"].title(),
-                    "icon": item["weather"][0]["icon"],
-                    "humidity": item["main"]["humidity"],
-                    "pop": int(item["pop"] * 100)
+                weather["rain_chance"],
 
-                })
+                int(item["pop"] * 100)
 
-                if len(daily_forecast) == 5:
-                    break
+            )
 
-    else:
+    for item in forecast_data["list"]:
 
-        weather = {
-            "error": "City not found."
-        }
+        if "12:00:00" in item["dt_txt"]:
+
+            daily_forecast.append({
+
+                "day": datetime.strptime(
+                    item["dt_txt"],
+                    "%Y-%m-%d %H:%M:%S"
+                ).strftime("%a"),
+
+                "temp": round(item["main"]["temp"]),
+                "temp_min": round(item["main"]["temp_min"]),
+                "temp_max": round(item["main"]["temp_max"]),
+                "description": item["weather"][0]["description"].title(),
+                "icon": item["weather"][0]["icon"],
+                "humidity": item["main"]["humidity"],
+                "pop": int(item["pop"] * 100)
+
+            })
+
+            if len(daily_forecast) == 5:
+                break
 
     return render_template(
         "index.html",
