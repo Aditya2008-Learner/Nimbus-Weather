@@ -1,27 +1,18 @@
-const form = document.querySelector("form");
-
-if (form) {
-    form.addEventListener("submit", function () {
-        const button = form.querySelector("button");
-
-        button.innerHTML = "⏳ Loading...";
-        button.disabled = true;
-    });
-}
+const loadingScreen = document.getElementById("loading-screen");
 
 const searchForm = document.getElementById("searchForm");
 
 if (searchForm) {
 
-    searchForm.addEventListener("submit", function (e) {
+    searchForm.addEventListener("submit", function () {
 
-        e.preventDefault();
+        loadingScreen.classList.add("active");
 
-        const city = searchForm.city.value.trim();
+        const button = this.querySelector('button[type="submit"]');
 
-        if (city) {
-            window.location.href = `/weather/${encodeURIComponent(city)}`;
-        }
+        button.innerHTML = "⏳ Loading...";
+
+        button.disabled = true;
 
     });
 
@@ -33,61 +24,65 @@ if (locationBtn) {
 
     locationBtn.addEventListener("click", () => {
 
-        console.log("Location button clicked!");
-
         if (!navigator.geolocation) {
-            alert("Geolocation is not supported.");
+
+            alert("Geolocation isn't supported.");
+
             return;
+
         }
 
         navigator.geolocation.getCurrentPosition(
 
-            // Success
             (position) => {
 
-                console.log(position);
+                loadingScreen.classList.add("active");
 
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
 
-                window.location.href = `/location?lat=${lat}&lon=${lon}`;
+                setTimeout(() => {
+
+                    window.location.href =
+                        `/location?lat=${lat}&lon=${lon}`;
+
+                }, 150);
 
             },
 
-            // Error
             (error) => {
 
-                console.error(error);
-
-                let message = "";
+                loadingScreen.classList.remove("active");
 
                 switch (error.code) {
 
                     case error.PERMISSION_DENIED:
-                        message = "Location permission was denied. Please allow location access for your browser.";
+                        alert("Location permission denied.");
                         break;
 
                     case error.POSITION_UNAVAILABLE:
-                        message = "Your device couldn't determine your location. Please turn on GPS and try again.";
+                        alert("Unable to determine your location.");
                         break;
 
                     case error.TIMEOUT:
-                        message = "Location request timed out. Please try again.";
+                        alert("Location request timed out.");
                         break;
 
                     default:
-                        message = "Location is unavailable on this device.";
-                }
+                        alert("Unknown location error.");
 
-                alert(message);
+                }
 
             },
 
-            // Options
             {
+
                 enableHighAccuracy: true,
+
                 timeout: 15000,
+
                 maximumAge: 0
+
             }
 
         );
