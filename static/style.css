@@ -617,7 +617,7 @@ form button[type="submit"]:hover {
     background: #ef4444;
 
     box-shadow:
-        0 12px 30px rgba(0, 0, 0, .18);
+        0 12px 30px rgba(0, 0, 0, .10);
 
 }
 
@@ -762,7 +762,7 @@ form button[type="submit"]:hover {
 
     font-weight: 600;
 
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(4px);
 
 }
 
@@ -808,9 +808,9 @@ form button[type="submit"]:hover {
 
     border-radius: 24px;
 
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(4px);
 
-    -webkit-backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(4px);
 
     padding: 28px 22px;
 
@@ -839,7 +839,7 @@ form button[type="submit"]:hover {
     border-color: rgba(255, 255, 255, .3);
 
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, .15);
+        0 20px 40px rgba(0, 0, 0, .10);
 
 }
 
@@ -1809,7 +1809,7 @@ body.Clouds .cloud {
 
     background: rgba(15, 23, 42, .55);
 
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(4px);
 
     z-index: 9999;
 
@@ -2016,7 +2016,7 @@ body.Clouds .cloud {
 
     border: 1px solid rgba(255, 255, 255, .18);
 
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(4px);
 
     box-shadow:
         0 25px 60px rgba(0, 0, 0, .25);
@@ -2200,5 +2200,331 @@ body.Clouds .cloud {
 .loader-card {
 
     animation: loaderFloat 3s ease-in-out infinite;
+
+}
+
+/* ==========================================
+   WEATHER DETAILS PANEL
+========================================== */
+
+.weather-panel {
+
+    margin-top: 40px;
+
+    border-radius: 30px;
+
+    padding: 35px;
+
+    background: rgba(255, 255, 255, .08);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    /* backdrop-filter: blur(14px); */
+
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
+
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.panel-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 35px;
+
+}
+
+.panel-title {
+
+    display: flex;
+
+    gap: 18px;
+
+    align-items: center;
+
+}
+
+.panel-icon {
+
+    width: 68px;
+
+    height: 68px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, .08);
+
+}
+
+.panel-icon svg {
+
+    width: 34px;
+
+    height: 34px;
+
+}
+
+.panel-title h2 {
+
+    margin: 0;
+
+    font-size: 2rem;
+
+}
+
+.panel-title p {
+
+    opacity: .7;
+
+    margin-top: 6px;
+
+}
+
+/* ==========================================
+   LIVE PILL
+========================================== */
+
+.live-pill {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 22px;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, .08);
+
+    font-weight: 600;
+
+}
+
+.live-dot {
+
+    width: 10px;
+
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: #2ecc71;
+
+    animation: pulse 2s infinite;
+
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+
+        opacity: 1;
+
+    }
+
+    50% {
+
+        opacity: .35;
+
+    }
+
+}
+
+/* ==========================================
+   GRID
+========================================== */
+
+.metrics-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    border-top: 1px solid rgba(255, 255, 255, .12);
+
+    border-left: 1px solid rgba(255, 255, 255, .12);
+
+}
+
+/* ==========================================
+   METRIC
+========================================== */
+
+.metric {
+
+    padding: 30px;
+
+    border-right: 1px solid rgba(255, 255, 255, .12);
+
+    border-bottom: 1px solid rgba(255, 255, 255, .12);
+
+    transition: background .2s ease;
+
+
+}
+
+.metric:hover {
+
+    background: rgba(255, 255, 255, .05);
+
+}
+
+.metric svg {
+
+    width: 30px;
+
+    height: 30px;
+
+    margin-bottom: 18px;
+
+    opacity: .9;
+
+}
+
+.metric-label {
+
+    display: block;
+
+    font-size: .8rem;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    opacity: .65;
+
+}
+
+.metric h3 {
+
+    margin: 14px 0 18px;
+
+    font-size: 3rem;
+
+    font-weight: 700;
+
+}
+
+/* ==========================================
+   PROGRESS BAR
+========================================== */
+
+.progress {
+
+    height: 7px;
+
+    background: rgba(255, 255, 255, .12);
+
+    border-radius: 999px;
+
+    overflow: hidden;
+
+    margin-bottom: 15px;
+
+}
+
+.progress span {
+
+    display: block;
+
+    height: 100%;
+
+    border-radius: 999px;
+
+    background: linear-gradient(90deg,
+            #58b9ff,
+            #4ade80);
+
+}
+
+/* ==========================================
+   SMALL TEXT
+========================================== */
+
+.metric small {
+
+    font-size: .92rem;
+
+    opacity: .75;
+
+}
+
+/* ==========================================
+   TODAY TIP
+========================================== */
+
+.today-tip {
+
+    margin-top: 30px;
+
+    display: flex;
+
+    gap: 15px;
+
+    align-items: center;
+
+    padding: 22px 24px;
+
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, .06);
+
+}
+
+.today-tip svg {
+
+    width: 28px;
+
+    height: 28px;
+
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media(max-width:900px) {
+
+    .metrics-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .panel-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 20px;
+
+    }
+
+    .metric {
+
+        padding: 25px;
+
+    }
+
+    .metric h3 {
+
+        font-size: 2.3rem;
+
+    }
 
 }

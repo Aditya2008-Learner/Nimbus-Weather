@@ -202,95 +202,182 @@
 
         </section>
 
-        <!-- ================= STATS ================= -->
+        <!-- ================= WEATHER DETAILS ================= -->
 
-        <section class="stats-grid">
+        <section class="weather-panel">
 
-            <div class="stat-card">
+            <div class="panel-header">
 
-                <div class="stat-icon">
-                    <i data-lucide="droplets"></i>
-                </div>
+                <div class="panel-title">
 
-                <div class="stat-value">{{ weather.humidity }}%</div>
-
-                <div class="stat-title">Humidity</div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    <i data-lucide="wind"></i>
-                </div>
-
-                <div class="stat-value">{{ weather.wind }} m/s</div>
-
-                <div class="stat-title">Wind Speed</div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    <i data-lucide="gauge"></i>
-                </div>
-
-                <div class="stat-value">{{ weather.pressure }}</div>
-
-                <div class="stat-title">Pressure (hPa)</div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    <i data-lucide="eye"></i>
-                </div>
-
-                <div class="stat-value">{{ weather.visibility }} km</div>
-
-                <div class="stat-title">Visibility</div>
-
-            </div>
-
-            <div class="stat-card">
-
-                <div class="stat-icon">
-                    <i data-lucide="cloud-rain"></i>
-                </div>
-
-                <div class="stat-value">
-                    {{ weather.rain_chance }}%
-                </div>
-
-                <div class="stat-title">
-                    Rain Chance
-                </div>
-
-                <div class="stat-subtitle">
-
-                    {% if weather.rain_chance == 0 %}
-                    No Rain Expected
-                    {% elif weather.rain_chance < 40 %} Slight Chance {% elif weather.rain_chance < 70 %} Carry an
-                        Umbrella ☔ {% else %} Heavy Rain Expected {% endif %} </div>
-
-                </div>
-                <div class="stat-card">
-
-                    <div class="stat-icon">
+                    <div class="panel-icon">
                         <i data-lucide="cloud"></i>
                     </div>
 
-                    <div class="stat-value">
-                        {{ weather.clouds }}%
-                    </div>
+                    <div>
 
-                    <div class="stat-title">
-                        Cloud Cover
+                        <h2>Weather Details</h2>
+
+                        <p>Live conditions at a glance</p>
+
                     </div>
 
                 </div>
+
+                <div class="live-pill">
+
+                    <span class="live-dot"></span>
+
+                    Live Update
+
+                </div>
+
+            </div>
+
+
+            <div class="metrics-grid">
+
+                <!-- Humidity -->
+
+                <div class="metric">
+
+                    <i data-lucide="droplets"></i>
+
+                    <span class="metric-label">Humidity</span>
+
+                    <h3>{{ weather.humidity }}%</h3>
+
+                    <div class="progress">
+
+                        <span style="width:{{ weather.humidity }}%"></span>
+
+                    </div>
+
+                    <small>Comfort Level</small>
+
+                </div>
+
+
+                <!-- Wind -->
+
+                <div class="metric">
+
+                    <i data-lucide="wind"></i>
+
+                    <span class="metric-label">Wind Speed</span>
+
+                    <h3>{{ weather.wind }} m/s</h3>
+
+                    <div class="progress">
+
+                        <span style="width: {{ (weather.wind * 8) | round(0) }}%"></span>
+
+                    </div>
+
+                    <small>Light Breeze</small>
+
+                </div>
+
+
+                <!-- Pressure -->
+
+                <div class="metric">
+
+                    <i data-lucide="gauge"></i>
+
+                    <span class="metric-label">Pressure</span>
+
+                    <h3>{{ weather.pressure }}</h3>
+
+                    <div class="progress">
+
+                        <span style="width:70%"></span>
+
+                    </div>
+
+                    <small>Normal Pressure</small>
+
+                </div>
+
+
+                <!-- Visibility -->
+
+                <div class="metric">
+
+                    <i data-lucide="eye"></i>
+
+                    <span class="metric-label">Visibility</span>
+
+                    <h3>{{ weather.visibility }} km</h3>
+
+                    <div class="progress">
+
+                        <span style="width:100%"></span>
+
+                    </div>
+
+                    <small>Excellent Visibility</small>
+
+                </div>
+
+
+                <!-- Rain -->
+
+                <div class="metric">
+
+                    <i data-lucide="cloud-rain"></i>
+
+                    <span class="metric-label">Rain Chance</span>
+
+                    <h3>{{ weather.rain_chance }}%</h3>
+
+                    <div class="progress">
+
+                        <span style="width:{{ weather.rain_chance|safe }}%"></span>
+
+                    </div>
+
+                    <small>
+
+                        {% if weather.rain_chance == 0 %}
+                        No Rain Expected
+                        {% elif weather.rain_chance < 40 %} Slight Chance {% elif weather.rain_chance < 70 %} Carry
+                            Umbrella ☔ {% else %} Heavy Rain Expected {% endif %} </small>
+
+                </div>
+
+
+                <!-- Clouds -->
+
+                <div class="metric">
+
+                    <i data-lucide="cloud"></i>
+
+                    <span class="metric-label">Cloud Cover</span>
+
+                    <h3>{{ weather.clouds }}%</h3>
+
+                    <div class="progress">
+
+                        <span style="width:{{ weather.clouds }}%"></span>
+
+                    </div>
+
+                    <small>Sky Coverage</small>
+
+                </div>
+
+            </div>
+
+
+            <div class="today-tip">
+
+                <i data-lucide="sun-medium"></i>
+
+                <span>{{ weather.tip }}</span>
+
+            </div>
+
         </section>
 
         <!-- ================= SUN ================= -->
