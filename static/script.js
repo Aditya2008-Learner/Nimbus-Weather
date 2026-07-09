@@ -6,7 +6,7 @@ if (searchForm) {
 
     searchForm.addEventListener("submit", function () {
 
-        loadingScreen.classList.add("active");
+        loadingScreen.classList.remove("hidden");
 
         const button = this.querySelector('button[type="submit"]');
 
@@ -36,8 +36,7 @@ if (locationBtn) {
 
             (position) => {
 
-                loadingScreen.classList.add("active");
-
+                loadingScreen.classList.remove("hidden");
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
 
@@ -52,8 +51,7 @@ if (locationBtn) {
 
             (error) => {
 
-                loadingScreen.classList.remove("active");
-
+                loadingScreen.classList.add("hidden");
                 switch (error.code) {
 
                     case error.PERMISSION_DENIED:
@@ -90,3 +88,23 @@ if (locationBtn) {
     });
 
 }
+
+/* ==========================================================
+   PREMIUM LOADING SCREEN
+========================================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const loader = document.getElementById("loading-screen");
+
+    if (loader) {
+
+        setTimeout(() => {
+
+            loader.classList.add("hidden");
+
+        }, 250);
+
+    }
+
+});

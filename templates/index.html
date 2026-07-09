@@ -12,11 +12,35 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='icon/favicon.png') }}">
+
 </head>
 
 <body
     class="{% if weather %}{{ weather.main }}{% if not weather.is_day %} night{% endif %}{% else %}default{% endif %}">
 
+    <!-- =========================
+     Loading Screen
+========================= -->
+
+    <div id="loading-screen">
+
+        <div class="loader-card">
+
+            <div class="loader-icon">
+                ☁
+            </div>
+
+            <h1>Nimbus Weather</h1>
+
+            <p>Forecasts that feel alive.</p>
+
+            <div class="loader-spinner"></div>
+
+            <span>Loading weather...</span>
+
+        </div>
+
+    </div>
     <!-- Background Effects -->
 
     <div class="stars"></div>
@@ -26,23 +50,6 @@
     <div class="cloud cloud3"></div>
 
     <div class="container">
-
-
-        <!-- ================= LOADING SCREEN ================= -->
-
-        <div id="loading-screen">
-
-            <div class="loader-card">
-
-                <img src="https://openweathermap.org/img/wn/02d@2x.png" class="loader-icon" alt="Loading">
-
-                <h2>Loading Weather...</h2>
-
-                <p>Please wait a moment</p>
-
-            </div>
-
-        </div>
 
         <!-- ================= HEADER ================= -->
 
@@ -144,12 +151,16 @@
 
         {% else %}
 
-        <!-- ================= HERO ================= -->
-
         <section class="hero">
 
-            <img class="weather-icon" src="https://openweathermap.org/img/wn/{{ weather.icon }}@4x.png"
-                alt="Weather Icon">
+            <div class="greeting">
+
+                {{ weather.greeting }}
+
+            </div>
+
+            <img class="weather-icon weather-{{ weather.main|lower }}"
+                src="https://openweathermap.org/img/wn/{{ weather.icon }}@4x.png" alt="Weather">
 
             <h2>
 
@@ -159,7 +170,7 @@
 
             <div class="temperature">
 
-                {{ weather.temperature }}°C
+                {{ weather.temperature }}°
 
             </div>
 
@@ -171,7 +182,21 @@
 
             <div class="feels-like">
 
-                Feels Like {{ weather.feels_like }}°C
+                Feels like {{ weather.feels_like }}°
+
+            </div>
+
+            <div class="hero-highlow">
+
+                <span>⬆ {{ weather.temp_max }}°</span>
+
+                <span>⬇ {{ weather.temp_min }}°</span>
+
+            </div>
+
+            <div class="weather-tip">
+
+                {{ weather.tip }}
 
             </div>
 
@@ -246,14 +271,11 @@
                 <div class="stat-subtitle">
 
                     {% if weather.rain_chance == 0 %}
-
                     No Rain Expected
-
                     {% elif weather.rain_chance < 40 %} Slight Chance {% elif weather.rain_chance < 70 %} Carry an
                         Umbrella ☔ {% else %} Heavy Rain Expected {% endif %} </div>
 
                 </div>
-
                 <div class="stat-card">
 
                     <div class="stat-icon">

@@ -1,12 +1,17 @@
+# -----------------------------
+# Home Route
+# -----------------------------
+
 from flask import Flask, render_template, request, redirect, session
 from dotenv import load_dotenv
 from datetime import datetime, timedelta, timezone
-import os
 import requests
+import os
 
-# -----------------------------
-# Load Environment Variables
-# -----------------------------
+# ==========================================
+# Configuration
+# ==========================================
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -15,11 +20,13 @@ app.secret_key = os.getenv("SECRET_KEY")
 API_KEY = os.getenv("API_KEY")
 
 
-# -----------------------------
+# ==========================================
 # Helper Functions
-# -----------------------------
+# ==========================================
+
 def format_time(timestamp, timezone_offset):
     city_timezone = timezone(timedelta(seconds=timezone_offset))
+
     return datetime.fromtimestamp(
         timestamp,
         tz=city_timezone
@@ -27,22 +34,22 @@ def format_time(timestamp, timezone_offset):
 
 
 def build_weather(data):
-    return {
+
+    weather = {
 
         "city": data["name"],
         "country": data["sys"]["country"],
 
         "temperature": round(data["main"]["temp"]),
         "feels_like": round(data["main"]["feels_like"]),
-
         "temp_min": round(data["main"]["temp_min"]),
         "temp_max": round(data["main"]["temp_max"]),
 
         "humidity": data["main"]["humidity"],
         "pressure": data["main"]["pressure"],
-
         "visibility": data["visibility"] // 1000,
-"clouds": data["clouds"]["all"],
+        "clouds": data["clouds"]["all"],
+
         "wind": round(data["wind"]["speed"], 1),
 
         "description": data["weather"][0]["description"].title(),
@@ -66,25 +73,71 @@ def build_weather(data):
             data["sys"]["sunrise"]
             <= data["dt"]
             <= data["sys"]["sunset"]
-        )
+        ),
+
+        "tip": "",
+        "rain_chance": 0,
+        "aqi": 0,
+        "aqi_text": "",
+        "aqi_color": ""
+
     }
 
+    return weather
+
+
+# ==========================================
+# Weather Tips
+# ==========================================
+
+def add_weather_tip(weather):
+
+    temp = weather["temperature"]
+    humidity = weather["humidity"]
+    main = weather["main"]
+
+    if main == "Rain":
+        weather["tip"] = "☔ Carry an umbrella today."
+
+    elif main == "Thunderstorm":
+        weather["tip"] = "⛈ Stay indoors if possible."
+
+    elif main == "Snow":
+        weather["tip"] = "❄ Roads may be slippery."
+
+    elif temp >= 35:
+        weather["tip"] = "🥤 Stay hydrated today."
+
+    elif temp <= 10:
+        weather["tip"] = "🧥 A jacket is recommended."
+
+    elif humidity >= 85:
+        weather["tip"] = "💧 It'll feel very humid."
+
+    else:
+        weather["tip"] = "🚶 Perfect weather for outdoor plans."
+
+    return weather
+
+
+# ==========================================
+# AQI
+# ==========================================
 
 def get_aqi(weather):
 
-    aqi_url = (
+    url = (
         "https://api.openweathermap.org/data/2.5/air_pollution"
         f"?lat={weather['lat']}"
         f"&lon={weather['lon']}"
         f"&appid={API_KEY}"
     )
 
-    response = requests.get(aqi_url)
-    data = response.json()
+    response = requests.get(url).json()
 
-    weather["aqi"] = data["list"][0]["main"]["aqi"]
+    weather["aqi"] = response["list"][0]["main"]["aqi"]
 
-    aqi_levels = {
+    levels = {
 
         1: ("Good", "#2ecc71"),
         2: ("Fair", "#f1c40f"),
@@ -94,22 +147,27 @@ def get_aqi(weather):
 
     }
 
-    weather["aqi_text"] = aqi_levels[weather["aqi"]][0]
-    weather["aqi_color"] = aqi_levels[weather["aqi"]][1]
+    weather["aqi_text"] = levels[weather["aqi"]][0]
+    weather["aqi_color"] = levels[weather["aqi"]][1]
 
     return weather
 
 
+# ==========================================
+# Forecast
+# ==========================================
+
 def get_forecast(city):
 
-    forecast_url = (
+    url = (
         "https://api.openweathermap.org/data/2.5/forecast"
         f"?q={city}"
         f"&appid={API_KEY}"
         "&units=metric"
     )
 
-    response = requests.get(forecast_url)
+    response = requests.get(url)
+
     data = response.json()
 
     forecast = []
@@ -133,11 +191,11 @@ def get_forecast(city):
 
                 "humidity": item["main"]["humidity"],
 
-                "pop": int(item["pop"] * 100),
-
                 "description": item["weather"][0]["description"].title(),
 
-                "icon": item["weather"][0]["icon"]
+                "icon": item["weather"][0]["icon"],
+
+                "pop": int(item["pop"] * 100)
 
             })
 
@@ -146,10 +204,41 @@ def get_forecast(city):
 
     return forecast
 
+def get_rain_chance(city):
 
-# -----------------------------
-# Home Route
-# -----------------------------
+    url = (
+        "https://api.openweathermap.org/data/2.5/forecast"
+        f"?q={city}"
+        f"&appid={API_KEY}"
+        "&units=metric"
+    )
+
+    response = requests.get(url)
+
+    data = response.json()
+
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    highest = 0
+
+    for item in data["list"]:
+
+        if item["dt_txt"].startswith(today):
+
+            highest = max(
+
+                highest,
+
+                int(item["pop"] * 100)
+
+            )
+
+    return highest
+
+# ==========================================
+# Home
+# ==========================================
+
 @app.route("/", methods=["GET", "POST"])
 def home():
 
@@ -158,7 +247,7 @@ def home():
 
     if request.method == "POST":
 
-        city = request.form["city"]
+        city = request.form["city"].strip()
 
         url = (
             "https://api.openweathermap.org/data/2.5/weather"
@@ -168,26 +257,28 @@ def home():
         )
 
         response = requests.get(url)
-        data = response.json()
 
         if response.status_code == 200:
-            weather = build_weather(data)
+
+            weather = build_weather(response.json())
+
+            weather = add_weather_tip(weather)
+
             weather = get_aqi(weather)
 
             forecast = get_forecast(weather["city"])
 
-            weather["rain_chance"] = max(
-                (day["pop"] for day in forecast),
-                default=0
+            weather["rain_chance"] = get_rain_chance(
+                weather["city"]
             )
 
         else:
 
             weather = {
-
                 "error": "City not found."
-
             }
+
+            forecast = []
 
     return render_template(
 
@@ -197,114 +288,68 @@ def home():
 
         forecast=forecast
 
-    )  
+    )
 
+# ==========================================
+# Weather Route
+# ==========================================
 
 @app.route("/weather/<city>")
 def weather(city):
 
     url = (
-        f"https://api.openweathermap.org/data/2.5/weather"
-        f"?q={city}&appid={API_KEY}&units=metric"
-    )
-
-    forecast_url = (
-        f"https://api.openweathermap.org/data/2.5/forecast"
-        f"?q={city}&appid={API_KEY}&units=metric"
+        "https://api.openweathermap.org/data/2.5/weather"
+        f"?q={city}"
+        f"&appid={API_KEY}"
+        "&units=metric"
     )
 
     response = requests.get(url)
-    data = response.json()
 
-    forecast_response = requests.get(forecast_url)
-    forecast_data = forecast_response.json()
+    if response.status_code != 200:
 
-    daily_forecast = []
+        return render_template(
 
-    if response.status_code == 200:
+            "index.html",
 
-        weather = build_weather(data)
+            weather={
+                "error": "City not found."
+            },
 
-        weather["rain_chance"] = 0
-        # AQI
-        aqi_url = (
-            "https://api.openweathermap.org/data/2.5/air_pollution"
-            f"?lat={weather['lat']}"
-            f"&lon={weather['lon']}"
-            f"&appid={API_KEY}"
+            forecast=[]
+
         )
 
-        aqi_response = requests.get(aqi_url)
-        aqi_data = aqi_response.json()
+    weather = build_weather(response.json())
 
-        weather["aqi"] = aqi_data["list"][0]["main"]["aqi"]
+    weather = add_weather_tip(weather)
 
-        aqi_levels = {
-            1: ("Good", "#2ecc71"),
-            2: ("Fair", "#f1c40f"),
-            3: ("Moderate", "#e67e22"),
-            4: ("Poor", "#e74c3c"),
-            5: ("Very Poor", "#8e44ad")
-        }
+    weather = get_aqi(weather)
+    forecast = get_forecast(weather["city"])
 
-        weather["aqi_text"] = aqi_levels[weather["aqi"]][0]
-        weather["aqi_color"] = aqi_levels[weather["aqi"]][1]
-
-# Highest chance of rain today
-    today = datetime.now().strftime("%Y-%m-%d")
-
-    for item in forecast_data["list"]:
-
-        if item["dt_txt"].startswith(today):
-
-            weather["rain_chance"] = max(
-
-                weather["rain_chance"],
-
-                int(item["pop"] * 100)
-
-            )
-
-    for item in forecast_data["list"]:
-
-        if "12:00:00" in item["dt_txt"]:
-
-            daily_forecast.append({
-
-                "day": datetime.strptime(
-                    item["dt_txt"],
-                    "%Y-%m-%d %H:%M:%S"
-                ).strftime("%a"),
-
-                "temp": round(item["main"]["temp"]),
-                "temp_min": round(item["main"]["temp_min"]),
-                "temp_max": round(item["main"]["temp_max"]),
-                "description": item["weather"][0]["description"].title(),
-                "icon": item["weather"][0]["icon"],
-                "humidity": item["main"]["humidity"],
-                "pop": int(item["pop"] * 100)
-
-            })
-
-            if len(daily_forecast) == 5:
-                break
+    weather["rain_chance"] = get_rain_chance(weather["city"])
 
     return render_template(
+
         "index.html",
+
         weather=weather,
-        forecast=daily_forecast
+
+        forecast=forecast
+
     )
 
-# -----------------------------
-# Current Location Route
-# -----------------------------
+# ==========================================
+# Current Location
+# ==========================================
+
 @app.route("/location")
 def location():
 
     lat = request.args.get("lat")
     lon = request.args.get("lon")
 
-    current_url = (
+    url = (
         "https://api.openweathermap.org/data/2.5/weather"
         f"?lat={lat}"
         f"&lon={lon}"
@@ -312,47 +357,34 @@ def location():
         "&units=metric"
     )
 
-    response = requests.get(current_url)
-    if response.status_code == 200:
-        data = response.json()
-        weather = build_weather(data)
-        weather = get_aqi(weather)
+    response = requests.get(url)
 
-        city = data.get("name", "")
-        forecast = get_forecast(city)
+    if response.status_code != 200:
 
-        # Highest rain chance today
-        weather["rain_chance"] = 0
-
-        forecast_url = (
-            "https://api.openweathermap.org/data/2.5/forecast"
-            f"?q={city}"
-            f"&appid={API_KEY}"
-            "&units=metric"
-        )
-
-        forecast_response = requests.get(forecast_url)
-        forecast_data = forecast_response.json()
-
-        today = datetime.now().strftime("%Y-%m-%d")
-
-        for item in forecast_data["list"]:
-            if item["dt_txt"].startswith(today):
-                weather["rain_chance"] = max(
-                    weather["rain_chance"],
-                    int(item["pop"] * 100)
-                )
-
-        session["weather"] = weather
-        session["forecast"] = forecast
-    else:
         session["weather"] = {
             "error": "Unable to fetch location weather."
         }
+
         session["forecast"] = []
 
-    return redirect("/")
+        return redirect("/")
 
+    weather = build_weather(response.json())
+
+    weather = add_weather_tip(weather)
+
+    weather = get_aqi(weather)
+
+    forecast = get_forecast(weather["city"])
+
+    weather["rain_chance"] = get_rain_chance(
+        weather["city"]
+    )
+
+    session["weather"] = weather
+    session["forecast"] = forecast
+
+    return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
