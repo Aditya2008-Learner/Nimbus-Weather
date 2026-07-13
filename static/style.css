@@ -2489,3 +2489,56 @@ body.Clouds .cloud {
     opacity: 0.25;
     margin-top: 4px;
 }
+
+
+/* ==========================================================================
+   ULTRA-PERFORMANCE NEW FEATURE LAYOUTS
+   ========================================================================== */
+
+/* 1. Alert Banner & Pulsar Styling */
+.weather-alert-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.banner-text {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* GPU-friendly opacity animation (keeps CPU usage at zero) */
+.pulsar-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #64ffda;
+    /* Aqua accent */
+    border-radius: 50%;
+    flex-shrink: 0;
+    animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+    0% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.3;
+    }
+}
+
+/* 2. Wind Compass Arrow Tuning */
+.compass-arrow {
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
