@@ -1171,211 +1171,96 @@ form button[type="submit"]:hover {
 
 }
 
-/* ==========================================================
-   PART 4 — 5 DAY FORECAST
-========================================================== */
-
+/* ==========================================================================
+   PREMIUM LOW-HEADROOM FORECAST STRIP 
+   ========================================================================== */
 .forecast-section {
-
-    margin-top: 55px;
-
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 20px;
+    margin-top: 30px;
 }
 
-.forecast-section h2 {
-
-    text-align: center;
-
-    font-size: 34px;
-
-    margin-bottom: 28px;
-
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    opacity: 0.9;
+    color: #ffffff;
 }
 
-
-/* ===============================
-   FORECAST SCROLL
-=============================== */
-
-.forecast-scroll {
-
+.forecast-list {
     display: flex;
-
-    gap: 22px;
-
-    overflow-x: auto;
-
-    padding: 8px 6px 20px;
-
-    scroll-behavior: smooth;
-
-    scrollbar-width: none;
-
-}
-
-.forecast-scroll::-webkit-scrollbar {
-
-    display: none;
-
-}
-
-
-/* ===============================
-   FORECAST CARD
-=============================== */
-
-.forecast-card {
-
-    flex: 0 0 220px;
-
-    display: flex;
-
     flex-direction: column;
+    gap: 12px;
+}
 
+.forecast-row {
+    display: flex;
     align-items: center;
-
-    text-align: center;
-
-    padding: 24px;
-
-    border-radius: 26px;
-
-    background: rgba(255, 255, 255, .12);
-
-    border: 1px solid rgba(255, 255, 255, .18);
-
-    transition:
-        transform .25s ease,
-        background .25s ease,
-        border-color .25s ease;
-
+    justify-content: space-between;
+    padding: 10px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #ffffff;
 }
 
-.forecast-card:hover {
-
-    transform: translateY(-8px);
-
-    background: rgba(255, 255, 255, .18);
-
-    border-color: rgba(255, 255, 255, .28);
-
+.forecast-row:last-child {
+    border-bottom: none;
 }
-
-
-/* ===============================
-   DAY
-=============================== */
 
 .forecast-day {
-
-    font-size: 25px;
-
-    font-weight: 700;
-
-    margin-bottom: 10px;
-
+    flex: 1;
+    font-weight: 600;
+    font-size: 0.95rem;
 }
 
-
-/* ===============================
-   ICON
-=============================== */
+.forecast-weather {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
 .forecast-icon {
-
-    width: 85px;
-
-    height: 85px;
-
-    margin-bottom: 10px;
-
+    width: 32px;
+    height: 32px;
 }
 
-
-/* ===============================
-   TEMP
-=============================== */
-
-.forecast-temp {
-
-    font-size: 42px;
-
-    font-weight: 700;
-
-    line-height: 1;
-
-    margin-bottom: 12px;
-
+.forecast-desc {
+    font-size: 0.85rem;
+    opacity: 0.7;
 }
-
-
-/* ===============================
-   DESCRIPTION
-=============================== */
-
-.forecast-description {
-
-    min-height: 46px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 16px;
-
-    opacity: .9;
-
-    margin-bottom: 18px;
-
-}
-
-
-/* ===============================
-   MIN / MAX
-=============================== */
-
-.forecast-extra {
-
-    width: 100%;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    margin-bottom: 18px;
-
-}
-
-.forecast-extra span {
-
-    padding: 8px 14px;
-
-    border-radius: 999px;
-
-    background: rgba(255, 255, 255, .12);
-
-    font-size: 15px;
-
-}
-
-
-/* ===============================
-   RAIN
-=============================== */
 
 .forecast-rain {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #7ec8ff;
+    font-weight: 500;
+    text-align: center;
+}
 
-    width: 100%;
+.forecast-rain-empty {
+    flex: 1;
+    font-size: 0.85rem;
+    opacity: 0.25;
+    text-align: center;
+}
 
-    padding: 10px;
+.forecast-temps {
+    flex: 1.5;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    font-size: 0.95rem;
+}
 
-    border-radius: 999px;
+.temp-low {
+    opacity: 0.5;
+}
 
-    background: rgba(255, 255, 255, .14);
-
+.temp-high {
     font-weight: 600;
-
 }
 
 
@@ -1383,15 +1268,26 @@ form button[type="submit"]:hover {
    RESPONSIVE
 =============================== */
 
-@media (max-width:768px) {
+@media (max-width:768px) {}
 
-    .forecast-card {
+.forecast-card {
 
-        flex: 0 0 190px;
+    flex: 0 0 165px;
 
-    }
+    border-radius: 24px;
+
+    padding: 22px 18px;
+
+    text-align: center;
+
+    background: rgba(255, 255, 255, .08);
+
+    border: 1px solid rgba(255, 255, 255, .15);
+
+    transition: background .2s ease;
 
 }
+
 
 /* ==========================================================
    PART 5 — BACKGROUNDS, ANIMATIONS & FOOTER
@@ -2527,4 +2423,69 @@ body.Clouds .cloud {
 
     }
 
+}
+
+/* ==========================================================================
+   NEW HOURLY FORECAST LAYOUT
+   ========================================================================== */
+.hourly-section {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 20px;
+    margin-top: 24px;
+}
+
+.hourly-scroll-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 10px 0 5px 0;
+    scrollbar-width: none;
+    /* Hides scrollbar on Firefox */
+}
+
+.hourly-scroll-container::-webkit-scrollbar {
+    display: none;
+    /* Hides scrollbar on Chrome/Safari */
+}
+
+.hourly-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 70px;
+    /* Keeps cards uniform layout */
+    text-align: center;
+    color: #ffffff;
+}
+
+.hourly-time {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+.hourly-icon {
+    width: 40px;
+    height: 40px;
+    margin: 4px 0;
+}
+
+.hourly-temp {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.hourly-rain {
+    font-size: 0.75rem;
+    color: #7ec8ff;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.hourly-rain-empty {
+    font-size: 0.75rem;
+    opacity: 0.25;
+    margin-top: 4px;
 }
