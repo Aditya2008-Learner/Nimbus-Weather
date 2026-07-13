@@ -39,54 +39,52 @@ def format_time(timestamp: int, timezone_offset: int) -> str:
 
 def build_weather(data: dict) -> dict:
     """Build a clean weather dictionary for templates."""
+    
+    # Extract weather variables for tip calculation
+    temp = round(data["main"]["temp"])
+    humidity = data["main"]["humidity"]
+    weather_main = data["weather"][0]["main"].lower()
+    
+    # Performance-friendly server-side tip generation
+    tip = "🌤️ Conditions are stable. Have a wonderful day!"
+    if "rain" in weather_main or "drizzle" in weather_main:
+        tip = "☔ Rain detected. Grabbing an umbrella is a smart move today."
+    elif humidity > 80 and temp > 25:
+        tip = "💧 High humidity day. Stay hydrated and stick to cooler indoor areas."
+    elif temp > 32:
+        tip = "☀️ High temperatures outside. Seek shade and keep water nearby."
+    elif temp < 10:
+        tip = "🧥 It's quite chilly out. Layer up before heading out."
 
     weather = {
-
         "city": data["name"],
         "country": data["sys"]["country"],
-
-        "temperature": round(data["main"]["temp"]),
+        "temperature": temp,
         "feels_like": round(data["main"]["feels_like"]),
         "temp_min": round(data["main"]["temp_min"]),
         "temp_max": round(data["main"]["temp_max"]),
-
-        "humidity": data["main"]["humidity"],
+        "humidity": humidity,
         "pressure": data["main"]["pressure"],
-
         "visibility": round(data["visibility"] / 1000),
-
         "clouds": data["clouds"]["all"],
-
         "wind": round(data["wind"]["speed"], 1),
+        
+        # Capture wind degree for our hardware-accelerated compass arrow
+        "wind_deg": data["wind"].get("deg", 0),
 
         "main": data["weather"][0]["main"],
         "description": data["weather"][0]["description"].title(),
         "icon": data["weather"][0]["icon"],
-
         "lat": data["coord"]["lat"],
         "lon": data["coord"]["lon"],
-
-        "sunrise": format_time(
-            data["sys"]["sunrise"],
-            data["timezone"]
-        ),
-
-        "sunset": format_time(
-            data["sys"]["sunset"],
-            data["timezone"]
-        ),
-
-        "is_day": (
-            data["sys"]["sunrise"]
-            <= data["dt"]
-            <= data["sys"]["sunset"]
-        ),
-
-        # These get filled later
-        "tip": "",
+        "sunrise": format_time(data["sys"]["sunrise"], data["timezone"]),
+        "sunset": format_time(data["sys"]["sunset"], data["timezone"]),
+        "is_day": data["sys"]["sunrise"] <= data["dt"] <= data["sys"]["sunset"],
+        
+        # Inject our generated tip here
+        "tip": tip,
         "greeting": "",
         "rain_chance": 0,
-
     }
 
     return weather
