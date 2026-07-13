@@ -174,7 +174,7 @@
                     <span class="metric-label">Rain Chance</span>
                     <h3>{{ weather.rain_chance }}%</h3>
                     <div class="progress">
-                        <span style="width:{{ weather.rain_chance|safe }}%"></span>
+                        <span style="width:{{ weather.rain_chance|safe }}%;"></span>
                     </div>
                     <small>
                         {% if weather.rain_chance == 0 %} No Rain Expected
@@ -187,7 +187,7 @@
                     <span class="metric-label">Cloud Cover</span>
                     <h3>{{ weather.clouds }}%</h3>
                     <div class="progress">
-                        <span style="width:{{ weather.clouds }}%"></span>
+                        <span style="width:{{ weather.clouds }}%;"></span>
                     </div>
                     <small>Sky Coverage</small>
                 </div>
