@@ -93,18 +93,12 @@ if (locationBtn) {
    PREMIUM LOADING SCREEN
 ========================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    const loader = document.getElementById("loading-screen");
-
-    if (loader) {
-
+window.addEventListener('load', () => {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        loadingScreen.style.opacity = '0';
         setTimeout(() => {
-
-            loader.classList.add("hidden");
-
-        }, 250);
-
+            loadingScreen.style.display = 'none';
+        }, 400); // Matches the 0.4s CSS transition
     }
-
 });
