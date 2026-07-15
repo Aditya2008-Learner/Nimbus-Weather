@@ -56,7 +56,29 @@ def build_weather(data: dict) -> dict:
     elif temp < 10:
         tip = "🧥 It's quite chilly out. Layer up before heading out."
 
+
+# 1. Extract the raw UV value safely
+    uv_val = data.get("uvi", data.get("main", {}).get("uvi", 3.5)) 
+    
+    # 2. Translate the raw number into human-readable advice
+    if uv_val < 3:
+        uv_status = "🟢 Low Risk"
+        uv_advice = "Safe to stay outside without extra protection."
+    elif uv_val < 6:
+        uv_status = "🟡 Moderate Risk"
+        uv_advice = "Apply SPF 15+ if staying outdoors for long."
+    elif uv_val < 8:
+        uv_status = "🟠 High Risk"
+        uv_advice = "Seek shade during midday. Protection required."
+    else:
+        uv_status = "🔴 Very High / Extreme"
+        uv_advice = "Minimize sun exposure between 10 AM - 4 PM. Wear SPF 30+."
+
     weather = {
+
+    "uv_index": round(uv_val, 1),
+        "uv_status": uv_status,
+        "uv_advice": uv_advice,
         "city": data["name"],
         "country": data["sys"]["country"],
         "temperature": temp,
