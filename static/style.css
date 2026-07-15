@@ -1,2547 +1,455 @@
-/* ==========================================================
-   NIMBUS WEATHER V2
-   PART 1 — FOUNDATION
-========================================================== */
-
-/* ===============================
-   ROOT VARIABLES
-=============================== */
-
-:root {
-
-    --primary: #0066ff;
-    --primary-dark: #0052d4;
-
-    --success: #16a34a;
-
-    --glass: rgba(255, 255, 255, .14);
-    --glass-hover: rgba(255, 255, 255, .18);
-
-    --border: rgba(255, 255, 255, .20);
-
-    --text: #ffffff;
-
-    --shadow:
-        0 18px 40px rgba(0, 0, 0, .18);
-
-    --radius: 26px;
-
-}
-
-/* ===============================
-   RESET
-=============================== */
-
+/* ==========================================================================
+   NIMBUS BASE STYLES & VARIABLES
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-html {
-
-    scroll-behavior: smooth;
-
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
-
+    background: #0f172a;
+    color: #ffffff;
     min-height: 100vh;
-
     overflow-x: hidden;
-
-    font-family: "Segoe UI", sans-serif;
-
-    color: var(--text);
-
     position: relative;
-
-    transition: background .45s ease;
-
 }
-
-/* ===============================
-   TYPOGRAPHY
-=============================== */
-
-h1,
-h2,
-h3 {
-
-    font-weight: 700;
-
-}
-
-p {
-
-    line-height: 1.5;
-
-}
-
-/* ===============================
-   WEATHER THEMES
-=============================== */
-
-body.default {
-
-    background:
-        linear-gradient(135deg, #4facfe, #00f2fe);
-
-}
-
-body.Clear {
-
-    background:
-        linear-gradient(135deg, #FDB813, #FF7E5F);
-
-}
-
-body.Clouds {
-
-    background:
-        linear-gradient(135deg, #6D83F2, #B8C6DB);
-
-}
-
-body.Rain {
-
-    background:
-        linear-gradient(135deg, #0F2027, #203A43, #2C5364);
-
-}
-
-body.Drizzle {
-
-    background:
-        linear-gradient(135deg, #4B79A1, #6DD5FA);
-
-}
-
-body.Thunderstorm {
-
-    background:
-        linear-gradient(135deg, #232526, #414345);
-
-}
-
-body.Snow {
-
-    background:
-        linear-gradient(135deg, #E6DADA, #274046);
-
-}
-
-body.Mist,
-body.Fog,
-body.Haze {
-
-    background:
-        linear-gradient(135deg, #757F9A, #D7DDE8);
-
-}
-
-/* ===============================
-   NIGHT THEMES
-=============================== */
-
-body.Clear.night {
-
-    background:
-        linear-gradient(135deg, #0F2027, #203A43, #2C5364);
-
-}
-
-body.Clouds.night {
-
-    background:
-        linear-gradient(135deg, #232526, #414345);
-
-}
-
-body.Rain.night,
-body.Drizzle.night {
-
-    background:
-        linear-gradient(135deg, #141E30, #243B55);
-
-}
-
-body.Thunderstorm.night {
-
-    background:
-        linear-gradient(135deg, #000428, #004e92);
-
-}
-
-body.Snow.night {
-
-    background:
-        linear-gradient(135deg, #485563, #29323c);
-
-}
-
-/* ===============================
-   MAIN CONTAINER
-=============================== */
 
 .container {
-
-    width: min(1200px, 94%);
-
-    margin: 36px auto;
-
-    padding: 36px;
-
-    border-radius: 32px;
-
-    background: var(--glass);
-
-    border: 1px solid var(--border);
-
-    box-shadow: var(--shadow);
-
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 15px;
+    position: relative;
+    z-index: 1;
 }
 
-/* ===========================
-   APP HEADER
-=========================== */
-
-.app-header {
-
+header {
     text-align: center;
-
-    margin-bottom: 42px;
-
+    margin-bottom: 30px;
 }
 
-.logo {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 14px;
-
-    font-size: 2.8rem;
-
-    font-weight: 700;
-
-}
-
-.logo span {
-
-    font-size: 2.6rem;
-
+header h1 {
+    font-size: 2.8rem; /* Slightly larger for presence */
+    font-weight: 900;
     letter-spacing: -1px;
+    /* A bright white-to-vivid-cyan gradient that pops beautifully */
+    background: linear-gradient(135deg, #ffffff 20%, #e0f2fe 60%, #00f0ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Using filter: drop-shadow instead of text-shadow so it doesn't break the background-clip */
+    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.45));
+    transition: filter 0.3s ease;
+}
 
+/* Daytime specific header adjustments for maximum readability */
+body:not(.night) header h1 {
+    background: linear-gradient(135deg, #ffffff 30%, #bfe2ff 70%, #00a2ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0px 4px 10px rgba(1, 30, 64, 0.6)); /* Deep sky-blue shadow for daytime contrast */
 }
 
 .subtitle {
-
-    margin-top: 12px;
-
-    font-size: 1.05rem;
-
-    opacity: .72;
-
-    font-weight: 500;
-
-    letter-spacing: .3px;
-
-}
-
-/* ===============================
-   GLOBAL ANIMATIONS
-=============================== */
-
-@keyframes fadeUp {
-
-    from {
-
-        opacity: 0;
-        transform: translateY(18px);
-
-    }
-
-    to {
-
-        opacity: 1;
-        transform: translateY(0);
-
-    }
-
-}
-
-@keyframes float {
-
-    0% {
-
-        transform: translateY(0);
-
-    }
-
-    50% {
-
-        transform: translateY(-8px);
-
-    }
-
-    100% {
-
-        transform: translateY(0);
-
-    }
-
-}
-
-/* ===============================
-   PERFORMANCE
-=============================== */
-
-.hero,
-.stats-grid,
-.aqi-card,
-.sun-card,
-.forecast-section {
-
-    content-visibility: auto;
-
-    contain-intrinsic-size: 500px;
-
-}
-
-/* ===============================
-   GLOBAL IMAGE OPTIMIZATION
-=============================== */
-
-img {
-
-    display: block;
-
-    max-width: 100%;
-
-}
-
-/* ===============================
-   RESPONSIVE FOUNDATION
-=============================== */
-
-@media (max-width:1024px) {
-
-    .container {
-
-        width: 95%;
-        padding: 30px;
-
-    }
-
-}
-
-@media (max-width:768px) {
-
-    header h1 {
-
-        font-size: 42px;
-
-    }
-
-}
-
-@media (max-width:560px) {
-
-    .container {
-
-        padding: 20px;
-
-    }
-
-}
-
-/* ==========================================================
-   PART 2 — SEARCH & HOME
-========================================================== */
-
-/* ===============================
-   SEARCH FORM
-=============================== */
-
-form {
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-
-    gap: 16px;
-
-    margin-bottom: 42px;
-
-}
-
-form input {
-
-    flex: 1;
-
-    min-width: 280px;
-
-    padding: 18px 22px;
-
-    border: none;
-
-    outline: none;
-
-    border-radius: 18px;
-
-    font-size: 17px;
-
-    color: #222;
-
-    background: #ffffff;
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease;
-
-}
-
-form input:focus {
-
-    transform: scale(1.02);
-
-    box-shadow:
-        0 0 0 4px rgba(255, 255, 255, .25);
-
-}
-
-/* ===============================
-   BUTTONS
-=============================== */
-
-button {
-
-    cursor: pointer;
-
-    border: none;
-
-    border-radius: 18px;
-
-    padding: 18px 28px;
-
-    color: white;
-
-    font-size: 16px;
-
-    font-weight: 700;
-
-    transition:
-        transform .2s ease,
-        background .25s ease,
-        box-shadow .25s ease;
-
-}
-
-button:hover {
-
-    transform: translateY(-3px);
-
-}
-
-button:active {
-
-    transform: translateY(0);
-
-}
-
-/* Search */
-
-form button[type="submit"] {
-
-    background: var(--primary);
-
-}
-
-form button[type="submit"]:hover {
-
-    background: var(--primary-dark);
-
-}
-
-/* Location */
-
-.location-btn {
-
-    background: var(--success);
-
-}
-
-.location-btn:hover {
-
-    background: #15803d;
-
-}
-
-/* ===============================
-   POPULAR CITIES
-=============================== */
-
-.popular-cities {
-
-    margin-top: 15px;
-
-    text-align: center;
-
-}
-
-.popular-cities h3 {
-
-    font-size: 30px;
-
-    margin-bottom: 26px;
-
-}
-
-/* ===============================
-   CITY GRID
-=============================== */
-
-.city-grid {
-
-    display: grid;
-
-    grid-template-columns: repeat(4, 1fr);
-
-    gap: 18px;
-
-}
-
-/* ===============================
-   CITY CHIP
-=============================== */
-
-.city-chip {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 14px;
-
-    padding: 16px 18px;
-
-    text-decoration: none;
-
-    color: white;
-
-    border-radius: 20px;
-
-    background: rgba(255, 255, 255, .12);
-
-    border: 1px solid rgba(255, 255, 255, .18);
-
-    backdrop-filter: blur(10px);
-
-    transition:
-        transform .25s ease,
-        background .25s ease,
-        border-color .25s ease;
-
-}
-
-.city-chip:hover {
-
-    transform: translateY(-6px);
-
-    background: rgba(255, 255, 255, .20);
-
-    border-color: rgba(255, 255, 255, .30);
-
-}
-
-.city-chip:active {
-
-    transform: scale(.98);
-
-}
-
-/* ===============================
-   FLAGS
-=============================== */
-
-.flag {
-
-    width: 34px;
-
-    height: 24px;
-
-    object-fit: cover;
-
-    border-radius: 5px;
-
-    flex-shrink: 0;
-
-    box-shadow:
-        0 4px 10px rgba(0, 0, 0, .18);
-
-}
-
-/* ===============================
-   CITY NAME
-=============================== */
-
-.city-name {
-
-    font-size: 17px;
-
-    font-weight: 600;
-
-}
-
-/* ===============================
-   ERROR CARD
-=============================== */
-
-.error-card {
-
-    margin-top: 20px;
-
-    padding: 18px;
-
-    text-align: center;
-
-    color: white;
-
-    font-weight: 600;
-
-    border-radius: 18px;
-
-    background: #ef4444;
-
-    box-shadow:
-        0 12px 30px rgba(0, 0, 0, .10);
-
-}
-
-/* ===============================
-   RESPONSIVE
-=============================== */
-
-@media (max-width:900px) {
-
-    .city-grid {
-
-        grid-template-columns: repeat(2, 1fr);
-
-    }
-
-}
-
-@media (max-width:768px) {
-
-    form {
-
-        flex-direction: column;
-
-    }
-
-    form input {
-
-        width: 100%;
-
-    }
-
-    button {
-
-        width: 100%;
-
-    }
-
-}
-
-@media (max-width:520px) {
-
-    .city-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-}
-
-/* ==========================================================
-   PART 3 — HERO & WEATHER DETAILS
-========================================================== */
-
-
-/* ==========================================================
-   PREMIUM HERO
-========================================================== */
-
-.hero {
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    text-align: center;
-
-    padding: 20px 0 35px;
-
-}
-
-.weather-icon {
-
-    width: 170px;
-
-    filter: drop-shadow(0 15px 35px rgba(0, 0, 0, .25));
-
-    animation: float 4s ease-in-out infinite;
-
-}
-
-.temperature {
-
-    font-size: 100px;
-
-    font-weight: 700;
-
-    line-height: 1;
-
-    letter-spacing: -3px;
-
-    margin-top: 10px;
-
-}
-
-.description {
-
-    font-size: 26px;
-
-    font-weight: 600;
-
-    margin-top: 12px;
-
-}
-
-.hero h2 {
-
-    margin-top: 18px;
-
-    font-size: 34px;
-
-}
-
-.feels-like {
-
-    margin-top: 10px;
-
-    opacity: .82;
-
-    font-size: 18px;
-
-}
-
-.hero-highlow {
-
-    display: flex;
-
-    gap: 18px;
-
-    margin-top: 22px;
-
-}
-
-.hero-highlow span {
-
-    padding: 12px 22px;
-
-    border-radius: 999px;
-
-    background: rgba(255, 255, 255, .12);
-
-    border: 1px solid rgba(255, 255, 255, .18);
-
-    font-weight: 600;
-
-    backdrop-filter: blur(4px);
-
-}
-
-.weather-tip {
-
-    margin-top: 28px;
-
-    padding: 14px 24px;
-
-    border-radius: 999px;
-
-    background: rgba(255, 255, 255, .14);
-
-    border: 1px solid rgba(255, 255, 255, .18);
-
-    font-size: 17px;
-
-    font-weight: 500;
-
-}
-
-/* ===============================
-   Premium Weather Cards
-================================ */
-
-.stats-grid {
-
-    display: grid;
-
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-
-    gap: 24px;
-
-    margin-top: 40px;
-
-}
-
-.stat-card {
-
-    background: rgba(255, 255, 255, .08);
-
-    border: 1px solid rgba(255, 255, 255, .15);
-
-    border-radius: 24px;
-
-    backdrop-filter: blur(4px);
-
-    -webkit-backdrop-filter: blur(4px);
-
-    padding: 28px 22px;
-
-    min-height: 220px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    text-align: center;
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        border-color .25s ease;
-}
-
-.stat-card:hover {
-
-    transform: translateY(-6px);
-
-    border-color: rgba(255, 255, 255, .3);
-
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, .10);
-
-}
-
-.stat-card::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-
-        linear-gradient(135deg,
-            rgba(255, 255, 255, .12),
-            transparent 70%);
-
-    pointer-events: none;
-
-}
-
-.stat-icon {
-
-    width: 72px;
-
-    height: 72px;
-
-    border-radius: 20px;
-
-    background: rgba(255, 255, 255, .06);
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    margin-bottom: 18px;
-
-}
-
-.stat-icon svg {
-
-    width: 34px;
-    height: 34px;
-
-}
-
-.stat-value {
-
-    font-size: 48px;
-
-    font-weight: 700;
-
-    line-height: 1;
-
-    margin-bottom: 10px;
-
-}
-
-.stat-title {
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-    opacity: .92;
-
-}
-
-.stat-subtitle {
-
-    margin-top: 10px;
-
-    font-size: 14px;
-
-    opacity: .72;
-
-    line-height: 1.4;
-
-}
-
-
-/* ===============================
-   Icon Colors
-================================ */
-
-.stat-card:nth-child(1) .stat-icon {
-
-    color: #50C4FF;
-
-}
-
-.stat-card:nth-child(2) .stat-icon {
-
-    color: #38E0B8;
-
-}
-
-.stat-card:nth-child(3) .stat-icon {
-
-    color: #A879FF;
-
-}
-
-.stat-card:nth-child(4) .stat-icon {
-
-    color: #FFD44D;
-
-}
-
-.stat-card:nth-child(5) .stat-icon {
-
-    color: #5AA9FF;
-
-}
-
-.stat-card:nth-child(6) .stat-icon {
-
-    color: #BFC9D8;
-
-}
-
-
-/* ===============================
-   TITLE
-=============================== */
-
-.stat-title {
-
-    font-size: 1.05rem;
-
-    font-weight: 600;
-
-    opacity: .9;
-
-    text-align: center;
-
-}
-
-
-/* ===============================
-   AQI
-=============================== */
-
-.aqi-card {
-
-    margin: 40px 0;
-
-    padding: 30px;
-
-    text-align: center;
-
-    border-radius: 24px;
-
-    background: rgba(255, 255, 255, .12);
-
-    border: 1px solid rgba(255, 255, 255, .18);
-
-}
-
-.aqi-card h2 {
-
-    margin-bottom: 24px;
-
-    font-size: 30px;
-
-}
-
-.aqi-badge {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    min-width: 180px;
-
-    padding: 15px 32px;
-
-    border-radius: 999px;
-
-    color: white;
-
-    font-size: 20px;
-
-    font-weight: 700;
-
-}
-
-
-/* ===============================
-   SUN CARD
-=============================== */
-
-.sun-card {
-
-    margin-top: 35px;
-
-    padding: 30px;
-
-    border-radius: 24px;
-
-    background: rgba(255, 255, 255, .12);
-
-    border: 1px solid rgba(255, 255, 255, .18);
-
-}
-
-.sun-card h2 {
-
-    text-align: center;
-
-    margin-bottom: 24px;
-
-}
-
-.sun-times {
-
-    display: flex;
-
-    justify-content: space-evenly;
-
-    align-items: center;
-
-}
-
-.sun-item {
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    gap: 10px;
-
-}
-
-.sun-item svg {
-
-    width: 36px;
-
-    height: 36px;
-
-    color: #FFD166;
-
-}
-
-.sun-label {
-
-    opacity: .75;
-
-    font-size: 17px;
-
-}
-
-.sun-time {
-
-    font-size: 28px;
-
-    font-weight: 700;
-
-}
-
-.sun-divider {
-
-    width: 1px;
-
-    height: 70px;
-
-    background: rgba(255, 255, 255, .20);
-
-}
-
-
-/* ===============================
-   RESPONSIVE
-=============================== */
-
-@media (max-width:900px) {
-
-    .stats-grid {
-
-        grid-template-columns: repeat(2, 1fr);
-
-    }
-
-}
-
-@media (max-width:768px) {
-
-    .temperature {
-
-        font-size: 74px;
-
-    }
-
-    .hero h2 {
-
-        font-size: 28px;
-
-    }
-
-    .sun-times {
-
-        flex-direction: column;
-
-        gap: 30px;
-
-    }
-
-    .sun-divider {
-
-        display: none;
-
-    }
-
-}
-
-@media (max-width:560px) {
-
-    .stats-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
+    font-size: 0.95rem;
+    font-weight: 600; /* Made slightly bolder */
+    color: #ffffff;
+    opacity: 0.95; /* Increased opacity */
+    margin-top: 6px;
+    /* Clean, protective drop shadow to handle the light background */
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); 
 }
 
 /* ==========================================================================
-   PREMIUM LOW-HEADROOM FORECAST STRIP 
+   PERFORMANCE-OPTIMIZED CANVAS BACKGROUND
    ========================================================================== */
-.forecast-section {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 24px;
-    padding: 20px;
-    margin-top: 30px;
-}
-
-.section-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 16px;
-    opacity: 0.9;
-    color: #ffffff;
-}
-
-.forecast-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.forecast-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 4px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    color: #ffffff;
-}
-
-.forecast-row:last-child {
-    border-bottom: none;
-}
-
-.forecast-day {
-    flex: 1;
-    font-weight: 600;
-    font-size: 0.95rem;
-}
-
-.forecast-weather {
-    flex: 2;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.forecast-icon {
-    width: 32px;
-    height: 32px;
-}
-
-.forecast-desc {
-    font-size: 0.85rem;
-    opacity: 0.7;
-}
-
-.forecast-rain {
-    flex: 1;
-    font-size: 0.85rem;
-    color: #7ec8ff;
-    font-weight: 500;
-    text-align: center;
-}
-
-.forecast-rain-empty {
-    flex: 1;
-    font-size: 0.85rem;
-    opacity: 0.25;
-    text-align: center;
-}
-
-.forecast-temps {
-    flex: 1.5;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    font-size: 0.95rem;
-}
-
-.temp-low {
-    opacity: 0.5;
-}
-
-.temp-high {
-    font-weight: 600;
-}
-
-
-/* ===============================
-   RESPONSIVE
-=============================== */
-
-@media (max-width:768px) {}
-
-.forecast-card {
-
-    flex: 0 0 165px;
-
-    border-radius: 24px;
-
-    padding: 22px 18px;
-
-    text-align: center;
-
-    background: rgba(255, 255, 255, .08);
-
-    border: 1px solid rgba(255, 255, 255, .15);
-
-    transition: background .2s ease;
-
-}
-
-
-/* ==========================================================
-   PART 5 — BACKGROUNDS, ANIMATIONS & FOOTER
-========================================================== */
-
-
-/* ===============================
-   FOOTER
-=============================== */
-
-footer {
-
-    margin-top: 60px;
-
-    text-align: center;
-
-    opacity: .75;
-
-}
-
-.footer-divider {
-
-    width: 100%;
-
-    height: 1px;
-
-    background: rgba(255, 255, 255, .18);
-
-    margin-bottom: 25px;
-
-}
-
-footer p {
-
-    margin: 8px 0;
-
-    font-size: 15px;
-
-}
-
-
-/* ===============================
-   NIGHT THEMES
-=============================== */
-
-body.Clear.night {
-    background: linear-gradient(135deg, #0F2027, #203A43, #2C5364);
-}
-
-body.Clouds.night {
-    background: linear-gradient(135deg, #232526, #414345);
-}
-
-body.Rain.night,
-body.Drizzle.night {
-    background: linear-gradient(135deg, #141E30, #243B55);
-}
-
-body.Thunderstorm.night {
-    background: linear-gradient(135deg, #000428, #004e92);
-}
-
-body.Snow.night {
-    background: linear-gradient(135deg, #485563, #29323c);
-}
-
-
-/* ===============================
-   STARS
-=============================== */
-
-.stars {
-
+#nimbus-canvas {
     position: fixed;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    z-index: -3;
-
-    opacity: 0;
-
-    transition: .5s;
-
-}
-
-.stars::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background-image:
-
-        radial-gradient(circle, white 1px, transparent 1px),
-
-        radial-gradient(circle, white 1px, transparent 1px);
-
-    background-size: 130px 130px;
-
-    background-position: 0 0, 65px 65px;
-
-}
-
-body.night .stars {
-
-    opacity: .45;
-
-}
-
-
-/* ===============================
-   CLOUDS
-=============================== */
-
-.cloud {
-
-    position: fixed;
-
-    width: 220px;
-
-    height: 70px;
-
-    border-radius: 100px;
-
-    background: rgba(255, 255, 255, .16);
-
-    filter: blur(4px);
-
-    pointer-events: none;
-
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: -2;
-
-    opacity: 0;
-
-}
-
-.cloud::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 90px;
-
-    height: 90px;
-
-    border-radius: 50%;
-
-    background: inherit;
-
-    top: -35px;
-
-    left: 30px;
-
-}
-
-.cloud::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 70px;
-
-    height: 70px;
-
-    border-radius: 50%;
-
-    background: inherit;
-
-    top: -20px;
-
-    right: 25px;
-
-}
-
-.cloud1 {
-
-    top: 10%;
-
-    left: -260px;
-
-}
-
-.cloud2 {
-
-    top: 35%;
-
-    left: -420px;
-
-}
-
-.cloud3 {
-
-    top: 60%;
-
-    left: -560px;
-
-}
-
-body.Clouds .cloud {
-
-    opacity: 1;
-
-    animation: moveClouds 130s linear infinite;
-
-}
-
-
-/* ===============================
-   RAIN
-=============================== */
-
-.rain {
-
-    position: fixed;
-
-    inset: 0;
-
     pointer-events: none;
-
-    opacity: 0;
-
-    background-image:
-
-        repeating-linear-gradient(transparent 0,
-
-            transparent 20px,
-
-            rgba(255, 255, 255, .28) 21px,
-
-            rgba(255, 255, 255, .28) 23px);
-
-    background-size: 8px 30px;
-
-}
-
-.show-rain {
-
-    opacity: 1;
-
-    animation: rainFall .45s linear infinite;
-
-}
-
-
-/* ===============================
-   ANIMATIONS
-=============================== */
-
-@keyframes moveClouds {
-
-    from {
-
-        transform: translateX(0);
-
-    }
-
-    to {
-
-        transform: translateX(calc(100vw + 700px));
-
-    }
-
-}
-
-@keyframes rainFall {
-
-    from {
-
-        background-position: 0 0;
-
-    }
-
-    to {
-
-        background-position: -20px 80px;
-
-    }
-
-}
-
-@keyframes float {
-
-    0% {
-
-        transform: translateY(0);
-
-    }
-
-    50% {
-
-        transform: translateY(-8px);
-
-    }
-
-    100% {
-
-        transform: translateY(0);
-
-    }
-
-}
-
-@keyframes fadeUp {
-
-    from {
-
-        opacity: 0;
-
-        transform: translateY(18px);
-
-    }
-
-    to {
-
-        opacity: 1;
-
-        transform: translateY(0);
-
-    }
-
-}
-
-
-/* ===============================
-   GLOBAL ANIMATION
-=============================== */
-
-.hero,
-.stats-grid,
-.aqi-card,
-.sun-card,
-.forecast-section {
-
-    animation: fadeUp .45s ease;
-
-}
-
-
-/* ===============================
-   MOBILE
-=============================== */
-
-@media (max-width:1024px) {
-
-    .container {
-
-        width: 95%;
-
-    }
-
-}
-
-@media (max-width:768px) {
-
-    header h1 {
-
-        font-size: 42px;
-
-    }
-
-    .subtitle {
-
-        font-size: 17px;
-
-    }
-
-    form {
-
-        flex-direction: column;
-
-    }
-
-    form input,
-    button {
-
-        width: 100%;
-
-    }
-
-}
-
-@media (max-width:560px) {
-
-    .container {
-
-        padding: 22px;
-
-        margin: 18px auto;
-
-    }
-
-}
-
-/* ==========================================================
-   LOADING SCREEN
-========================================================== */
-
-#loading-screen {
-
-    position: fixed;
-
-    inset: 0;
-
-    display: none;
-
-    justify-content: center;
-
-    align-items: center;
-
-    background: rgba(15, 23, 42, .55);
-
-    backdrop-filter: blur(4px);
-
-    z-index: 9999;
-
-}
-
-#loading-screen.active {
-
-    display: flex;
-
-}
-
-.loader-card {
-
-    width: 320px;
-
-    padding: 35px;
-
-    border-radius: 24px;
-
-    text-align: center;
-
-    background: rgba(255, 255, 255, .15);
-
-    border: 1px solid rgba(255, 255, 255, .22);
-
-    box-shadow: 0 20px 45px rgba(0, 0, 0, .25);
-
-}
-
-.loader-card h2 {
-
-    margin-top: 15px;
-
-    font-size: 28px;
-
-}
-
-.loader-card p {
-
-    margin-top: 10px;
-
-    opacity: .75;
-
-}
-
-.loader-icon {
-
-    width: 90px;
-
-    margin: auto;
-
-    animation: loaderFloat 2s ease-in-out infinite;
-
-}
-
-@keyframes loaderFloat {
-
-    0% {
-
-        transform: translateY(0);
-
-    }
-
-    50% {
-
-        transform: translateY(-12px);
-
-    }
-
-    100% {
-
-        transform: translateY(0);
-
-    }
-
+    will-change: transform;
 }
 
 /* ==========================================================================
-   HIGH-PERFORMANCE SMOOTH LOADER (60 FPS GPU ACCELERATED)
+   LOADING SCREEN & LOADER CARD
    ========================================================================== */
 #loading-screen {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0f172a; 
+    width: 100vw;
+    height: 100vh;
+    background: #0f172a;
     z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: opacity 0.4s ease, visibility 0.4s ease;
-    will-change: opacity;
-}
-
-#loading-screen[style*="opacity: 0"] {
-    visibility: hidden;
-    pointer-events: none;
+    transition: opacity 0.5s ease;
 }
 
 .loader-card {
     text-align: center;
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    backdrop-filter: blur(10px);
 }
 
-/* Pulse animation using opacity only (keeps CPU flatline) */
 .loader-icon {
-    font-size: 3rem;
-    animation: pulseIcon 1.5s infinite ease-in-out;
-    will-change: opacity;
+    font-size: 4rem;
+    animation: bounce 2s infinite ease-in-out;
 }
 
-/* The Spinner: Uses GPU-accelerated transform rotation */
 .loader-spinner {
     width: 40px;
     height: 40px;
+    border: 4px solid rgba(0, 240, 255, 0.1);
+    border-top-color: #00f0ff;
+    border-radius: 50%;
     margin: 20px auto;
-    border: 3px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    border-top-color: #00f0ff; /* Matches your wind vector cyan blue */
-    will-change: transform;    /* Tells the browser to process this on the graphics card */
-    animation: smoothSpin 0.8s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 /* ==========================================================================
-   GPU KEYFRAMES (No layout shifting allowed)
+   SEARCH FORM & CONTROLS
    ========================================================================== */
-@keyframes smoothSpin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes pulseIcon {
-    0% { opacity: 0.4; }
-    50% { opacity: 1; }
-    100% { opacity: 0.4; }
-}
-
-/* ================= CARD ================= */
-
-.loader-card {
-
-    width: 340px;
-
-    padding: 45px 35px;
-
-    text-align: center;
-
-    border-radius: 28px;
-
-    background: rgba(255, 255, 255, .12);
-
-    border: 1px solid rgba(255, 255, 255, .18);
-
-    backdrop-filter: blur(4px);
-
-    box-shadow:
-        0 25px 60px rgba(0, 0, 0, .25);
-
-}
-
-/* ================= LOGO ================= */
-
-.loader-logo {
-
-    font-size: 34px;
-
-    font-weight: 700;
-
-    color: white;
-
-    margin-bottom: 12px;
-
-}
-
-.loader-subtitle {
-
-    color: rgba(255, 255, 255, .82);
-
-    margin-bottom: 35px;
-
-    font-size: 16px;
-
-}
-
-/* ================= WEATHER ICON ================= */
-
-.weather-loader {
-
-    position: relative;
-
-    width: 90px;
-
-    height: 90px;
-
-    margin: 0 auto 30px;
-
-}
-
-/* Sun */
-
-.sun {
-
-    position: absolute;
-
-    right: 12px;
-    top: 10px;
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 50%;
-
-    background: #FFD54F;
-
-    box-shadow:
-        0 0 30px rgba(255, 213, 79, .7);
-
-    animation:
-        sunRotate 8s linear infinite;
-
-}
-
-/* Cloud */
-
-.cloud-loader {
-
-    position: absolute;
-
-    bottom: 18px;
-    left: 5px;
-
-    width: 58px;
-    height: 22px;
-
-    background: white;
-
-    border-radius: 40px;
-
-}
-
-.cloud-loader::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 30px;
-    height: 30px;
-
-    border-radius: 50%;
-
-    background: white;
-
-    left: 8px;
-    top: -16px;
-
-}
-
-.cloud-loader::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 24px;
-    height: 24px;
-
-    border-radius: 50%;
-
-    background: white;
-
-    right: 10px;
-    top: -10px;
-
-}
-
-/* ================= TEXT ================= */
-
-.loader-card h2 {
-
-    color: white;
-
-    font-size: 28px;
-
-    margin-bottom: 10px;
-
-}
-
-.loader-card p {
-
-    color: rgba(255, 255, 255, .75);
-
-}
-
-/* ================= ANIMATIONS ================= */
-
-@keyframes sunRotate {
-
-    from {
-
-        transform: rotate(0deg);
-
-    }
-
-    to {
-
-        transform: rotate(360deg);
-
-    }
-
-}
-
-@keyframes loaderFloat {
-
-    0% {
-
-        transform: translateY(0);
-
-    }
-
-    50% {
-
-        transform: translateY(-8px);
-
-    }
-
-    100% {
-
-        transform: translateY(0);
-
-    }
-
-}
-
-.loader-card {
-
-    animation: loaderFloat 3s ease-in-out infinite;
-
-}
-
-/* ==========================================
-   WEATHER DETAILS PANEL
-========================================== */
-
-.weather-panel {
-
-    margin-top: 40px;
-
-    border-radius: 30px;
-
-    padding: 35px;
-
-    background: rgba(255, 255, 255, .08);
-
-    border: 1px solid rgba(255, 255, 255, .15);
-
-    /* backdrop-filter: blur(14px); */
-
-    box-shadow: 0 8px 18px rgba(0, 0, 0, .12);
-
-}
-
-/* ==========================================
-   HEADER
-========================================== */
-
-.panel-header {
-
+#searchForm {
     display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 35px;
-
-}
-
-.panel-title {
-
-    display: flex;
-
-    gap: 18px;
-
-    align-items: center;
-
-}
-
-.panel-icon {
-
-    width: 68px;
-
-    height: 68px;
-
-    display: grid;
-
-    place-items: center;
-
-    border-radius: 20px;
-
-    background: rgba(255, 255, 255, .08);
-
-}
-
-.panel-icon svg {
-
-    width: 34px;
-
-    height: 34px;
-
-}
-
-.panel-title h2 {
-
-    margin: 0;
-
-    font-size: 2rem;
-
-}
-
-.panel-title p {
-
-    opacity: .7;
-
-    margin-top: 6px;
-
-}
-
-/* ==========================================
-   LIVE PILL
-========================================== */
-
-.live-pill {
-
-    display: flex;
-
-    align-items: center;
-
     gap: 10px;
-
-    padding: 12px 22px;
-
-    border-radius: 999px;
-
-    background: rgba(255, 255, 255, .08);
-
-    font-weight: 600;
-
+    max-width: 600px;
+    margin: 0 auto 30px auto;
 }
 
-.live-dot {
-
-    width: 10px;
-
-    height: 10px;
-
-    border-radius: 50%;
-
-    background: #2ecc71;
-
-    animation: pulse 2s infinite;
-
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-
-        opacity: 1;
-
-    }
-
-    50% {
-
-        opacity: .35;
-
-    }
-
-}
-
-/* ==========================================
-   GRID
-========================================== */
-
-.metrics-grid {
-
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    border-top: 1px solid rgba(255, 255, 255, .12);
-
-    border-left: 1px solid rgba(255, 255, 255, .12);
-
-}
-
-/* ==========================================
-   METRIC
-========================================== */
-
-.metric {
-
-    padding: 30px;
-
-    border-right: 1px solid rgba(255, 255, 255, .12);
-
-    border-bottom: 1px solid rgba(255, 255, 255, .12);
-
-    transition: background .2s ease;
-
-
-}
-
-.metric:hover {
-
-    background: rgba(255, 255, 255, .05);
-
-}
-
-.metric svg {
-
-    width: 30px;
-
-    height: 30px;
-
-    margin-bottom: 18px;
-
-    opacity: .9;
-
-}
-
-.metric-label {
-
-    display: block;
-
-    font-size: .8rem;
-
-    letter-spacing: 2px;
-
-    text-transform: uppercase;
-
-    opacity: .65;
-
-}
-
-.metric h3 {
-
-    margin: 14px 0 18px;
-
-    font-size: 3rem;
-
-    font-weight: 700;
-
-}
-
-/* ==========================================
-   PROGRESS BAR
-========================================== */
-
-.progress {
-
-    height: 7px;
-
-    background: rgba(255, 255, 255, .12);
-
-    border-radius: 999px;
-
-    overflow: hidden;
-
-    margin-bottom: 15px;
-
-}
-
-.progress span {
-
-    display: block;
-
-    height: 100%;
-
-    border-radius: 999px;
-
-    background: linear-gradient(90deg,
-            #58b9ff,
-            #4ade80);
-
-}
-
-/* ==========================================
-   SMALL TEXT
-========================================== */
-
-.metric small {
-
-    font-size: .92rem;
-
-    opacity: .75;
-
-}
-
-/* ==========================================
-   TODAY TIP
-========================================== */
-
-.today-tip {
-
-    margin-top: 30px;
-
-    display: flex;
-
-    gap: 15px;
-
-    align-items: center;
-
-    padding: 22px 24px;
-
-    border-radius: 20px;
-
-    background: rgba(255, 255, 255, .06);
-
-}
-
-.today-tip svg {
-
-    width: 28px;
-
-    height: 28px;
-
-}
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media(max-width:900px) {
-
-    .metrics-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    .panel-header {
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 20px;
-
-    }
-
-    .metric {
-
-        padding: 25px;
-
-    }
-
-    .metric h3 {
-
-        font-size: 2.3rem;
-
-    }
-
-}
-
-/* ==========================================================================
-   NEW HOURLY FORECAST LAYOUT
-   ========================================================================== */
-.hourly-section {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 24px;
-    padding: 20px;
-    margin-top: 24px;
-}
-
-.hourly-scroll-container {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    padding: 10px 0 5px 0;
-    scrollbar-width: none;
-    /* Hides scrollbar on Firefox */
-}
-
-.hourly-scroll-container::-webkit-scrollbar {
-    display: none;
-    /* Hides scrollbar on Chrome/Safari */
-}
-
-.hourly-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 0 0 70px;
-    /* Keeps cards uniform layout */
-    text-align: center;
+#searchForm input {
+    flex: 1;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
     color: #ffffff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
 }
 
-.hourly-time {
-    font-size: 0.85rem;
-    opacity: 0.7;
-    font-weight: 500;
+#searchForm input:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #00f0ff;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
 }
 
-.hourly-icon {
-    width: 40px;
-    height: 40px;
-    margin: 4px 0;
-}
-
-.hourly-temp {
-    font-size: 1.1rem;
+#searchForm button {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #00f0ff 0%, #0072ff 100%);
+    border: none;
+    border-radius: 30px;
+    color: #ffffff;
     font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.hourly-rain {
-    font-size: 0.75rem;
-    color: #7ec8ff;
-    margin-top: 4px;
-    font-weight: 500;
+#searchForm button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
 }
 
-.hourly-rain-empty {
-    font-size: 0.75rem;
-    opacity: 0.25;
-    margin-top: 4px;
+.location-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
-
 
 /* ==========================================================================
-   ULTRA-PERFORMANCE NEW FEATURE LAYOUTS
+   POPULAR CITIES NAVIGATION CHIPS
    ========================================================================== */
+.popular-cities {
+    margin-top: 40px;
+}
 
-/* 1. Alert Banner & Pulsar Styling */
-.weather-alert-banner {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px;
-    padding: 12px 16px;
+.popular-cities h3 {
     margin-bottom: 20px;
-    color: #ffffff;
-}
-
-.banner-text {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     opacity: 0.9;
 }
 
-/* GPU-friendly opacity animation (keeps CPU usage at zero) */
-.pulsar-dot {
+.city-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+}
+
+.city-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 16px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.city-chip:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.flag {
+    width: 24px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+/* ==========================================================================
+   HERO DISPLAY (Main Weather Presentation)
+   ========================================================================== */
+.hero {
+    text-align: center;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+}
+
+.greeting {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.6;
+    margin-bottom: 10px;
+}
+
+.weather-icon {
+    width: 150px;
+    height: 150px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+
+.temperature {
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin: 10px 0;
+}
+
+.description {
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.feels-like {
+    font-size: 0.95rem;
+    opacity: 0.7;
+}
+
+.hero-highlow {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   WEATHER METRICS PANEL
+   ========================================================================== */
+.weather-panel {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.panel-title h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.panel-title p {
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+
+.live-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 240, 255, 0.1);
+    color: #00f0ff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.live-dot {
     width: 8px;
     height: 8px;
-    background-color: #64ffda;
-    /* Aqua accent */
+    background: #00f0ff;
     border-radius: 50%;
-    flex-shrink: 0;
-    animation: pulseGlow 2s infinite ease-in-out;
+    animation: pulse 1.5s infinite;
 }
 
-@keyframes pulseGlow {
-    0% {
-        opacity: 0.3;
-    }
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
 
-    50% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0.3;
+@media (max-width: 600px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
     }
 }
 
-/* 2. Wind Compass Arrow Tuning */
-.compass-arrow {
-    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+.metric {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 16px;
 }
 
-/* ==========================================================================
-   CHARTLESS TEMPERATURE CURVE STYLE PACK
-   ========================================================================== */
-.temp-curve-bar-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    height: 90px; /* Locked frame bounds to ensure zero layout shifting */
-    margin: 12px 0;
-    width: 100%;
+.metric i {
+    color: #00f0ff;
+    margin-bottom: 8px;
 }
 
-.temp-curve-pill {
-    background: linear-gradient(180deg, rgba(0, 240, 255, 0.35) 0%, rgba(0, 240, 255, 0.03) 100%);
-    border-top: 2px solid #00f0ff;
-    border-radius: 8px 8px 4px 4px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    padding-top: 6px;
-    position: relative;
-    min-height: 25px; /* Ensures text values don't overflow bounds */
+.metric-label {
+    display: block;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    margin-bottom: 4px;
 }
 
-.hourly-temp-value {
-    font-size: 0.95rem;
+.metric h3 {
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #ffffff;
-    text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 10px;
+}
+
+.progress {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 6px;
+}
+
+.progress span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #00f0ff, #0072ff);
+    border-radius: 3px;
+}
+
+.metric small {
+    font-size: 0.75rem;
+    opacity: 0.5;
+}
+
+.today-tip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0, 240, 255, 0.04);
+    border: 1px solid rgba(0, 240, 255, 0.15);
+    padding: 16px;
+    border-radius: 16px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    box-shadow: 0 4px 20px rgba(0, 240, 255, 0.05);
+}
+
+.today-tip i {
+    color: #00f0ff;
+    filter: drop-shadow(0 0 4px rgba(0, 240, 255, 0.4));
+    flex-shrink: 0;
 }
 
 /* ==========================================================================
-   HIGH-VISIBILITY UV CARD DESIGNS
+   SUN CYCLE CARD
+   ========================================================================== */
+.sun-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.sun-card h2 {
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+}
+
+.sun-times {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sun-item {
+    text-align: center;
+}
+
+.sun-item i {
+    font-size: 1.5rem;
+    color: #ffb300;
+    margin-bottom: 6px;
+}
+
+.sun-label {
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.sun-time {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.sun-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   LAG-FREE GLASSMORPHIC UV CARD
    ========================================================================== */
 .uv-card {
-   
     background: rgba(255, 255, 255, 0.12);
-    
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 20px;
     padding: 20px;
-    margin-top: 20px;
+    margin-bottom: 24px;
     color: #ffffff;
-    
-    will-change: transform; 
-    
+    will-change: transform;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 
                 inset 0 1px 1px rgba(255, 255, 255, 0.2);
 }
@@ -2608,15 +516,296 @@ body.Clouds .cloud {
 }
 
 /* ==========================================================================
-   PERFORMANCE-OPTIMIZED WEATHER CANVAS
+   5-DAY FORECAST SECTION
    ========================================================================== */
-#nimbus-canvas {
+.forecast-section {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.forecast-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.forecast-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.forecast-row:last-child {
+    border: none;
+    padding-bottom: 0;
+}
+
+.forecast-day {
+    font-weight: 600;
+    min-width: 100px;
+}
+
+.forecast-weather {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+}
+
+.forecast-icon {
+    width: 35px;
+    height: 35px;
+}
+
+.forecast-desc {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.forecast-rain {
+    font-size: 0.85rem;
+    color: #38bdf8;
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+.forecast-rain-empty {
+    font-size: 0.85rem;
+    opacity: 0.4;
+    margin-right: 15px;
+}
+
+.forecast-temps {
+    display: flex;
+    gap: 10px;
+    font-weight: 600;
+}
+
+.temp-low {
+    opacity: 0.5;
+}
+
+/* ==========================================================================
+   HOURLY TREND & CHARTLESS CURVE
+   ========================================================================== */
+.hourly-section {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.hourly-scroll-container {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scrollbar-width: thin;
+}
+
+.hourly-card {
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 16px;
+}
+
+.hourly-time {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.hourly-icon {
+    width: 40px;
+    height: 40px;
+}
+
+.temp-curve-bar-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 90px;
+    margin: 12px 0;
+    width: 100%;
+}
+
+.temp-curve-pill {
+    background: linear-gradient(180deg, rgba(0, 240, 255, 0.35) 0%, rgba(0, 240, 255, 0.03) 100%);
+    border-top: 2px solid #00f0ff;
+    border-radius: 8px 8px 4px 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 6px;
+    position: relative;
+    min-height: 25px;
+}
+
+.hourly-temp-value {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hourly-rain {
+    font-size: 0.8rem;
+    color: #38bdf8;
+    font-weight: 600;
+}
+
+.hourly-rain-empty {
+    font-size: 0.8rem;
+    opacity: 0.4;
+}
+
+/* ==========================================================================
+   FOOTER & DIVIDERS
+   ========================================================================== */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-bottom: 20px;
+}
+
+.footer-divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+}
+
+footer p {
+    font-size: 0.8rem;
+    opacity: 0.5;
+    margin-bottom: 4px;
+}
+
+/* ==========================================================================
+   SYSTEM ANIMATIONS (GPU ACCELERATED)
+   ========================================================================== */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.5; }
+}
+
+/* ==========================================================================
+   PERFORMANCE-OPTIMIZED DAY / NIGHT SYSTEM (GPU-ACCELERATED)
+   ========================================================================== */
+
+/* Base body with fixed, lightweight background */
+body {
+    background-color: #0b1528; /* Fallback solid color */
+    color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+/* THE SECRET SAUCE: 
+   We use pseudo-elements for the backgrounds. Transitioning 'opacity' 
+   uses the GPU directly and completely bypasses heavy browser repaints!
+*/
+body::before,
+body::after {
+    content: "";
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -2; /* Keeps it strictly behind all layout text and cards */
-    pointer-events: none; /* Mouse scrolls pass right through it cleanly */
-    will-change: transform; /* Flags the browser to paint this on the GPU */
+    width: 100%;
+    height: 100%;
+    z-index: -3; /* Behind everything, including canvas */
+    pointer-events: none;
+    transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: opacity; /* Tells the browser to prepare the GPU */
+}
+
+/* --- DAYTIME LAYER (::before) --- */
+body::before {
+    background: linear-gradient(180deg, #0284c7 0%, #0ea5e9 50%, #7dd3fc 100%);
+    opacity: 1; /* Daytime is active by default */
+}
+
+/* Day Weather Variations */
+body.clear::before {
+    background: linear-gradient(180deg, #0ea5e9 0%, #38bdf8 60%, #bae6fd 100%);
+}
+body.clouds::before {
+    background: linear-gradient(180deg, #475569 0%, #64748b 60%, #94a3b8 100%);
+}
+body.rain::before, body.thunderstorm::before, body.drizzle::before {
+    background: linear-gradient(180deg, #334155 0%, #475569 60%, #64748b 100%);
+}
+
+/* --- NIGHTTIME LAYER (::after) --- */
+body::after {
+    background: linear-gradient(180deg, #020617 0%, #090d16 50%, #0f172a 100%);
+    opacity: 0; /* Nighttime is hidden by default */
+}
+
+/* Night Weather Variations */
+body.night.clear::after {
+    background: linear-gradient(180deg, #030712 0%, #090d16 50%, #0f172a 100%);
+}
+body.night.clouds::after {
+    background: linear-gradient(180deg, #020617 0%, #0f172a 50%, #111827 100%);
+}
+body.night.rain::after, body.night.thunderstorm::after, body.night.drizzle::after {
+    background: linear-gradient(180deg, #020617 0%, #090d16 70%, #1e293b 100%);
+}
+
+/* THE SWITCH:
+   When .night class is added to body, fade out the Day layer 
+   and fade in the Night layer simultaneously.
+*/
+body.night::before {
+    opacity: 0;
+}
+body.night::after {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   ADDITIONAL PERF TWEAKS
+   ========================================================================== */
+
+/* Hardware accelerate stars */
+.stars {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+    will-change: opacity;
+    transform: translate3d(0, 0, 0); /* Forces GPU layer creation */
+}
+
+body.night .stars {
+    opacity: 0.75;
+}
+
+/* Ensure the canvas doesn't steal performance */
+#nimbus-canvas {
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
 }

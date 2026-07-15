@@ -40,12 +40,10 @@ def format_time(timestamp: int, timezone_offset: int) -> str:
 def build_weather(data: dict) -> dict:
     """Build a clean weather dictionary for templates."""
     
-    # Extract weather variables for tip calculation
     temp = round(data["main"]["temp"])
     humidity = data["main"]["humidity"]
     weather_main = data["weather"][0]["main"].lower()
     
-    # Performance-friendly server-side tip generation
     tip = "🌤️ Conditions are stable. Have a wonderful day!"
     if "rain" in weather_main or "drizzle" in weather_main:
         tip = "☔ Rain detected. Grabbing an umbrella is a smart move today."
@@ -56,11 +54,8 @@ def build_weather(data: dict) -> dict:
     elif temp < 10:
         tip = "🧥 It's quite chilly out. Layer up before heading out."
 
-
-# 1. Extract the raw UV value safely
     uv_val = data.get("uvi", data.get("main", {}).get("uvi", 3.5)) 
     
-    # 2. Translate the raw number into human-readable advice
     if uv_val < 3:
         uv_status = "🟢 Low Risk"
         uv_advice = "Safe to stay outside without extra protection."
@@ -91,7 +86,6 @@ def build_weather(data: dict) -> dict:
         "clouds": data["clouds"]["all"],
         "wind": round(data["wind"]["speed"], 1),
         
-        # Capture wind degree for our hardware-accelerated compass arrow
         "wind_deg": data["wind"].get("deg", 0),
 
         "main": data["weather"][0]["main"],
@@ -103,7 +97,6 @@ def build_weather(data: dict) -> dict:
         "sunset": format_time(data["sys"]["sunset"], data["timezone"]),
         "is_day": data["sys"]["sunrise"] <= data["dt"] <= data["sys"]["sunset"],
         
-        # Inject our generated tip here
         "tip": tip,
         "greeting": "",
         "rain_chance": 0,
